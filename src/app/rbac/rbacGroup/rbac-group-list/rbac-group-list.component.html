@@ -1,0 +1,162 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Group','Add')" routerLink="/rbac/rbacgroup/form" style="color: #000000;" class="stickyButtons">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add
+      </button>
+    </a>
+    </div>
+    <form class="col-md-4 col-sm-8 col-9 example-form elem">
+      <form class="form-inline md-form active-pink-2 mt-0 mb-0">
+        <mdb-icon style="    color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>  
+        <input  class="form-control form-control-sm  w-75 TopMenuSearchField" (focus)="searchInput = true;" (blur)="searchInput = false;"  type="text" matInput [(ngModel)]="searchKey" name="searchKey" type="text" placeholder="Search Groups" aria-label="Search"  (keyup)="applyFilter()" >                                            
+        <button mat-icon-button    matSuffix   type="button"   *ngIf="searchKey" (click)="onSearchClick()"> <mat-icon>clear</mat-icon></button>
+      </form>
+    </form>
+
+    
+    <div class="col-md-7 col-sm-12 col-xs-12 PaginatorFixed IsSmallScreen">
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+    </div>
+
+</div>
+
+<div class="row py-4">
+
+    <!--Grid column-->
+    <div class="col-lg-12 col-md-12">
+      <!--Card-->
+      <mdb-card cascade="true" narrower="true">
+        <!--Card image-->
+        <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+          <h4 class="h4-responsive">Group</h4>
+         
+        </div>
+        <!--/Card image-->
+  
+        <!--Card content-->
+        <mdb-card-body cascade="true">
+            <div style="overflow-y: auto" mdbModal #frame="mdbModal" class="modal fade right" id="frameModalTop" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: true, ignoreBackdropClick: true}">
+            <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+              <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                  <p class="heading lead"> Group Users
+                  </p>
+                                      
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+                    <span aria-hidden="true" class="white-text">×</span>
+                  </button>
+                </div>
+  
+                <!--Body-->
+                <div class="modal-body">
+                  <div class="text-left">
+                      <div *ngFor="let g of userGroups">
+                          <h5>{{g.GroupName}}</h5>         
+                          <hr>                 
+                          <ul *ngFor="let us of g.RBAC_Users_Groups">                 
+                              <li>{{us.RBAC_Users.FirstName + ' ' + us.RBAC_Users.LastName}}</li>
+                          </ul>
+                      </div>                
+                      <br>                                                                                             
+                  </div>  
+                </div>
+  
+              </div>
+            </div>
+          </div>
+
+          <div class="=row">   
+
+              <div class="col-md-12 col-sm-12 col-xs-12 IsBigScreen justify-content-center">            
+                  <mat-paginator (page)="syncPrimaryPaginator($event)"  [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+                  [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions" showFirstLastButtons></mat-paginator>                    
+                  <br>                
+              </div>
+
+              <div class="mat-elevation-z8 table-responsive difftab">
+                <mat-table [dataSource]="listData" matSort>
+                <ng-container matColumnDef="ID">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="ID">{{element.ID}}</mat-cell>
+                </ng-container>                
+                <ng-container matColumnDef="GroupName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Group Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Group Name">{{element.GroupName}}</mat-cell>
+                </ng-container>               
+                <ng-container matColumnDef="IsAdmin">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Admin</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Admin">{{element.IsAdmin == true? 'Yes' : 'No'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="ModifiedDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Modified Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Modified Date">{{element.ModifiedDate| date:'MM/d/yyyy'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="actions" >
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row" class="TableCommandButtons">
+                      
+                      <button 
+                      class="iconshadow"
+                      mdbBtn type="button" flat="true" size="md" mdbWavesEffect
+                      [matMenuTriggerFor]="menu"
+                      >
+                          <mdb-icon fas icon="ellipsis-h"></mdb-icon>
+                      </button>                     
+                        <mat-menu #menu="matMenu" yPosition="below">   
+                          
+                          <button mat-menu-item 
+                          *ngIf="common.CheckIfUserhasAccess_Action('Group','View')" 
+                          (click)="onEdit(row)"                          >
+                          <mat-icon>remove_red_eye</mat-icon>
+                            <span>View</span>
+                          </button>
+
+                          <button  mat-menu-item 
+                          *ngIf="common.CheckIfUserhasAccess_Action('Group','View')" 
+                           (click)="openFrame(frame, row)">
+                          <mat-icon>group</mat-icon>
+                            <span>Users</span>
+                          </button>
+                          
+                        </mat-menu>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="loading">
+                    <mat-footer-cell *matFooterCellDef>
+                        Loading...
+                        <div class="spinner-grow ml-2" role="status">                          
+                            <span class="sr-only float-right">Loading...</span>
+                        </div>
+                    </mat-footer-cell>                  
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <mat-footer-cell *matFooterCellDef>No Data</mat-footer-cell>                  
+                </ng-container>
+
+
+                 <!-- Row shown when there is no matching data. -->
+                <ng-container matColumnDef="noSearchMatch">
+                  <mat-footer-cell *matFooterCellDef> {{searchNotFoundText}} &nbsp;<b> "{{searchKey}}" </b></mat-footer-cell>                  
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':listData!=null}" ></mat-footer-row>
+                <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(listData!=null && listData.data.length==0)}" ></mat-footer-row>
+                <mat-footer-row *matFooterRowDef="['noSearchMatch']" [ngClass]="{'hide':!(listData!=null && listData.filteredData.length==0)}" ></mat-footer-row>
+              </mat-table>
+              <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator> -->
+            </div>                                      
+        </div>
+        </mdb-card-body>
+        <!--/.Card content-->
+      </mdb-card>
+      <!--/.Card-->
+    </div>
+    <!--Grid column-->
+  </div>

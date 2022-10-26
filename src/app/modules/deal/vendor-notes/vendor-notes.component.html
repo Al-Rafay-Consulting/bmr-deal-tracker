@@ -1,0 +1,138 @@
+<div
+  class="modal-header light-blue darken-3 white-text  gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+  <h4 class="h4-responsive">
+   {{formTitle}}
+  </h4>
+  <!-- <a (click)="modalRef.hide()" mdbBtn floating="true" mdbTooltip="Close" aria-label="Close" placement="left"   size="sm"
+     gradient="aqua"  mdbWavesEffect>
+    <mdb-icon fas icon="times"></mdb-icon>
+  </a>
+   -->
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a (click)="modalRef.hide()">
+    <button mdbBtn type="button" color="info" size="sm" class="waves-light" mdbWavesEffect>
+      <mdb-icon fas icon="times" ></mdb-icon>
+    </button>
+  </a>
+
+  </div>
+</div>
+
+
+
+
+<div class="modal-body mb-0 text-left" id="modalBodyArea">
+  <div class="row">
+    <div class="col-sm-12">
+      <form #Notes="ngForm" autocomplete="off" (ngSubmit)="onSubmit(Notes)"> 
+
+        <div *ngIf="common.CheckIfUserhasAccess_Action('Vendor Notes','Add')" class="row" [hidden]="actionType == 'Attachment'">
+          <div class="col-sm-4" [hidden]="true">
+            <div class="md-form">
+              <input name="ID" #ID="ngModel" [(ngModel)]="formData.ID" type="text" 
+                class="form-control" mdbInput>
+              <label>ID</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+
+            <!-- <mat-form-field class="example-full-width">
+              <mat-label>BMR Deal Team</mat-label>
+              <mat-select #BMRDealTeam [multiple]="true" id="BMRDealTeamId" class="MatInputBoxShadow" type="text"
+                name="BMRDealTeamId" #BMRDealTeamId="ngModel" [(ngModel)]="selectedBMRDealTeam"
+                (ngModelChange)="AutoBMRDealTeam.searchResult.next($event)">
+                <mat-option [value]="0" (click)="toggleAllSelection('BMR Deal Team')">-- Select All --</mat-option>
+                <mat-option *ngFor="let option of AutoBMRDealTeam.results | async" [value]="option.Id">
+                  {{ option.Title }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+         </div>
+          <div class="col-sm-12">
+            <div  class="md-form">
+             <textarea style="white-space: pre-wrap !important;" required type="text"  class="md-textarea md-textarea-auto form-control" mdbInput name="Notes"
+                #Notes="ngModel" [(ngModel)]="formData.Notes"
+                rows="10">
+              </textarea>
+              
+              <label for="NotesText">Notes</label>
+              <div class="validation-error" *ngIf="Notes.invalid && Notes.touched"> This field is required </div> 
+                <!-- 
+             <mdb-wysiwyg name="Notes" required #wysiwyg  (valueChange)="onValueChange($event)"></mdb-wysiwyg>
+              <div class="validation-error" *ngIf="Notes.invalid && Notes.touched"> This field is required   </div> -->
+
+
+                
+            
+            </div>
+          </div>
+
+        </div>
+        <div class="text-right" [hidden]="actionType == 'Attachment'">         
+          <button *ngIf="common.CheckIfUserhasAccess_Action('Vendor Notes','Add')"  type="button" (click)="onSubmit(Notes)"  [disabled]="Notes.invalid" [hidden]="isView" mdbBtn color="default" class="waves-light"
+            mdbWavesEffect>
+            <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{ getSubmitText() }}
+          </button>
+        </div>
+
+        <div  [hidden]="actionType != 'Attachment'">
+            <input class="text-left" type="file" name="attach" id="attach" (change)="handleFileInput($event.target.files)">
+   
+             <button style="float:right;" *ngIf="common.CheckIfUserhasAccess_Action('Vendor Notes','Add')"  
+             type="button" (click)="SaveAttachment(Notes)"  
+             [disabled]="filesToUpload == null" [hidden]="isView" mdbBtn color="default" class="waves-light"
+               mdbWavesEffect>
+               <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+             </button>
+        </div>
+
+        
+      </form>
+    </div>
+  </div>
+
+  <br>
+
+ <div class="row" [hidden]="actionType != 'Attachment'">
+    <div class="col-md-12">
+    <div >
+      <table mdbTable class="z-depth-1 InputTable table">
+        <thead>
+          <tr>
+            <th>Notes</th>
+            
+            <!-- <th></th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let element of vendorNotesList">
+            <td>
+                <div class="NotesAuditInfo">
+                    Created on {{element.Modified | date:'MM/d/yyyy h:mm a'}} by {{element.Editor?.Title}}
+                  </div>
+                <div style="white-space: pre-wrap; padding-bottom: 15px;" [innerHTML]="element.Notes"></div>
+            </td>            
+            <!-- <td>
+              
+              <div class="btn-group float-right">
+                  <button mat-button  matTooltip="Edit" *ngIf="common.CheckIfUserhasAccess_Action('Client Notes','Edit')"  
+                  (click)="onEdit(es)">
+                  <mat-icon class="flat-Icon-Color">edit</mat-icon>                    
+                  </button>
+                  <button mat-button class="flat-Icon-Color"  matTooltip="Delete" *ngIf="common.CheckIfUserhasAccess_Action('Client Notes','Delete')" 
+                   (click)="DeleteNote(es.ID)">
+                  <mat-icon>delete</mat-icon>                   
+                  </button>                        
+              </div>
+            </td> -->
+          </tr> 
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div> 
+
+
+
+
+</div>

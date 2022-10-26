@@ -1,0 +1,202 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+
+    <div class="btn-group" role="group" aria-label="Basic example">
+
+        <a routerLink="/rbac/rbacpermission/list" style="color: #000000;" class="stickyButtons">
+            <button mdbBtn type="button" class="btn-sm">
+                <mdb-icon fas icon="list" class="mr-1"></mdb-icon>View List
+            </button>
+        </a>
+
+        <a (click)="onReload(permission)" class="stickyButtons">
+            <button mdbBtn  *ngIf="isEdit || isCreated" type="button" class="btn-sm">
+                <mdb-icon fas icon="times" class="mr-1"></mdb-icon>Cancel
+            </button>
+        </a>
+
+        <a *ngIf="common.CheckIfUserhasAccess_Action('Permission','Add')"  (click)="onCreate(permission)" class="stickyButtons">
+            <button mdbBtn type="button" *ngIf="!isCreated" class="btn-sm">
+                <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>New
+            </button>
+        </a>
+
+        <a *ngIf="common.CheckIfUserhasAccess_Action('Permission','Edit')" (click)="onEdit()" class="stickyButtons">
+            <button mdbBtn *ngIf="isView" class="btn-sm">
+                <mdb-icon fas icon="edit" class="mr-1"></mdb-icon>Edit
+            </button>
+        </a>
+        <a *ngIf="common.CheckIfUserhasAccess_Action('Permission','Delete')"   (click)="onDelete(primaryKey)" class="stickyButtons">
+            <button mdbBtn *ngIf="isEdit" class="btn-sm">
+                <mdb-icon fas icon="trash-alt" class="mr-1"></mdb-icon>Delete
+            </button>
+        </a>
+    </div>
+
+  </div>
+
+<div class="row py-4">
+
+    <div class="col-lg-12 col-md-12">
+        <mdb-card cascade="true" narrower="true">
+
+            <div
+                class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+                <h4 class="h4-responsive">{{formTitle}}</h4>                
+            </div>
+
+            <div class="row card-text">
+                <div class="col-sm-12">
+                    <div class="row AuditFields">
+                        <div class="col-md-12">
+                            {{AuditDetails}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form #permission="ngForm" autocomplete="off" (ngSubmit)="onSubmit(permission)"> 
+                <mdb-card-body cascade="true">
+                    <fieldset [disabled]="isView">
+                        <div class="row">
+                            <div class="col-sm-1"> </div>
+                            <div class="col-sm-3">
+                                <mat-form-field [hidden]="true" class="example-full-width">
+                                    <mat-label> ID</mat-label>
+                                    <input matInput class="MatInputBoxShadow" type="number" id="ID" name="ID"
+                                        #ID="ngModel" [(ngModel)]="formData.ID">
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Select Group</mat-label>
+                                    <mat-select  required
+                                        [(ngModel)]="formData.GroupId" #GroupId="ngModel" name="GroupId">
+                                        <mat-option>-- Clear --</mat-option>
+                                        <mat-option *ngFor="let option of rbacgroups " [value]="option.ID">
+                                            {{ option.GroupName }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="GroupId.invalid && GroupId.dirty">This field is required
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+
+                            <div class="col-sm-8">
+
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                        <br>
+                        <!-- User Groups-->
+                        <div class="row">
+                            <div class="col-sm-1"> </div>
+                            <div class="col-sm-10">
+                                <div>
+                                    <h5
+                                        class="d-block p-2 bg-primary text-white gradient-card-header blue-gradient ChildTitle">
+                                        Allow Permissions </h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"> </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-1"> </div>
+                            <div class="col-sm-10">
+                                <mdb-card>
+                                    <mdb-card-body>
+                                           
+                                        <mdb-accordion [multiple]="true" *ngFor="let es of vw_Modules; let i = index">
+                                            <mdb-accordion-item [collapsed]="true" [customClass]="'border-0'">
+                                                <mdb-accordion-item-head [customClass]="'blue-gradient white-text'">                                                       
+                                                    {{es.ModuleName}}
+                                                </mdb-accordion-item-head>
+                                                <fieldset [disabled]="isView">
+                                                    <mdb-accordion-item-body>
+                                                        <br>
+                                                        <mat-checkbox 
+                                                            [(ngModel)]="es.HasAccess"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (change)="UnSelectAll(es)">
+                                                            Access
+                                                        </mat-checkbox>
+                                                    <div [hidden]="!es.HasAccess">
+                                                        <hr>                                                   
+                                                        <button mdbBtn type="button" (click)="SelectAll(true, es)" color="info" size="sm" class="waves-light" mdbWavesEffect>
+                                                                <mdb-icon fas icon="check-double" class="mr-1"></mdb-icon>Select All
+                                                        </button>
+                                                        <button mdbBtn type="button" (click)="SelectAll(false, es)" color="info" size="sm" class="waves-light" mdbWavesEffect>
+                                                                <mdb-icon fas icon="times-circle" class="mr-1"></mdb-icon>Unselect All
+                                                        </button>
+                                                    
+                                                        <hr>
+                                                        <ul *ngFor="let s of es.RBAC_Sections" class="list-group list-group-flush">
+                                                            <li class="list-group-item">
+                                                                <!-- {{s.SectionName}} -->
+                                                                <mat-checkbox class="example-margin"
+                                                                    [checked]="s.allComplete"
+                                                                    [indeterminate]="someComplete(s)"
+                                                                    (change)="setAll($event.checked, s)"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="s.completed"
+                                                                    >
+                                                                    {{s.SectionName}}
+                                                                </mat-checkbox>
+                                                                <ul class="no-bullets"
+                                                                    *ngFor="let r of s.RBAC_SectionRights">
+                                                                    <li >
+                                                                        <!-- {{r.RBAC_Rights.RightName}}             -->
+                                                                        <mat-checkbox 
+                                                                            [(ngModel)]="r.completed"
+                                                                            [ngModelOptions]="{standalone: true}"
+                                                                            (ngModelChange)="updateAllComplete(s)"
+                                                                            (change)="OnRightChange(s, r, $event.checked)">
+                                                                            {{r.RBAC_Rights.RightName}}
+                                                                        </mat-checkbox>
+                                                                    </li>
+                                                                </ul>
+                                                                <hr>
+                                                            </li>
+                                                        </ul>                                                       
+                                                    </div>   
+                                                    <div class="text-center">
+                                                            <button type="button" (click)="onSubmitSection(permission, es)" [disabled]="permission.invalid" [hidden]="isView" mdbBtn
+                                                                color="default" class="waves-light" mdbWavesEffect>
+                                                                <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+                                                            </button>
+                                                    </div>                                                 
+                                                    </mdb-accordion-item-body>
+                                                </fieldset>
+                                            </mdb-accordion-item>
+
+                                            <br />
+
+                                        </mdb-accordion>
+                                           
+                                    </mdb-card-body>
+                                </mdb-card>
+                            </div>
+                            <div class="col-sm-1"> </div>
+
+                        </div>
+
+                        <br>
+
+
+                        <div class="text-center" [hidden]="true">
+                            <button  type="button" (click)="onSubmit(permission)" [disabled]="permission.invalid" [hidden]="isView" mdbBtn
+                                color="default" class="waves-light" mdbWavesEffect>
+                                <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+                            </button>
+                        </div>
+                    
+
+                </mdb-card-body>
+            </form>
+        </mdb-card>
+    </div>
+</div>

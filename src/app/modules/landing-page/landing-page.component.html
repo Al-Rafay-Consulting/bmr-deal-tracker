@@ -1,0 +1,79 @@
+<div class="row d-flex" style="margin-top:8%;margin-right:10%;margin-left:10%;">
+  <div class="col-md-4" *ngIf="common.checkRole('AC')">
+    <mdb-card
+    style="background-image: url('https://fmioffice.com/wp-content/uploads/2016/06/AdobeStock_109439683_opt.jpg')"
+    class="card-image mb-3 mx-2"
+  >
+    <!-- Content -->
+    <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
+      <div class="Alignment">
+        <h5 class="pink-text">
+          <mdb-icon fas icon="plus"></mdb-icon>
+
+        </h5>
+        <h3 class="card-title pt-2"><strong>New Deal Form</strong></h3>
+        <p>
+          --------------------
+        </p>
+        <a (click)="openNewDealList()" mdbBtn color="pink" class="waves-light" mdbWavesEffect>
+          <mdb-icon far icon="clone" class="left"></mdb-icon>
+          Start</a
+        >
+      </div>
+    </div>
+    <!-- Content -->
+  </mdb-card>
+  </div>
+  <div class="col-md-2" *ngIf="common.checkRole('AC') == false">
+  </div>
+  <div class="col-md-4">
+    <mdb-card
+    style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg')"
+    class="card-image mb-3 mx-2"
+  >
+    <!-- Content -->
+    <div class="text-white text-center d-flex align-items-center rgba-purple-strong py-5 px-4">
+      <div class="Alignment">
+        <h5 class="orange-text">
+          <mdb-icon fas icon="search"></mdb-icon>
+
+        </h5>
+        <h3 class="card-title pt-2"><strong>Deal Tracking</strong></h3>
+        <p>
+          --------------------
+        </p>
+        <a (click)="openDealsList()" mdbBtn color="deep-orange" class="waves-light" mdbWavesEffect>
+          <mdb-icon far icon="clone" class="left"></mdb-icon>
+          View</a
+        >
+      </div>
+    </div>
+    <!-- Content -->
+  </mdb-card>
+  </div>
+  <div class="col-md-4">
+    <mdb-card
+    style="background-image: url('https://previews.123rf.com/images/vinnstock/vinnstock1407/vinnstock140700048/29826361-calculator-and-pen-with-blue-business-charts-graphs-infomation-and-reports-background-for-financial-.jpg')"
+    class="card-image mb-3 mx-2"
+  >
+    <!-- Content -->
+    <div class="text-white text-center d-flex align-items-center rgba-indigo-strong py-5 px-4">
+      <div class="Alignment">
+        <h5 class="black-text">
+          <mdb-icon fas icon="chart-pie"></mdb-icon>
+
+        </h5>
+        <h3 class="card-title pt-2"><strong>Deal Tracking Report</strong></h3>
+        <p>
+          --------------------
+        </p>
+        <a (click)="openReportsList()" mdbBtn color="elegant" class="waves-light" mdbWavesEffect>
+          <mdb-icon far icon="clone" class="left"></mdb-icon>
+          View </a
+        >
+      </div>
+    </div>
+    <!-- Content -->
+  </mdb-card>
+  </div>
+</div>

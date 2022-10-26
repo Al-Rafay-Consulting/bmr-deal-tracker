@@ -1,0 +1,18 @@
+
+<!--While Loading Data-->
+<h6 class="text-center pt-4"  [hidden]="listData!=null">
+    Loading...
+    <div class="spinner-grow ml-2" role="status">                          
+        <span class="sr-only float-right">Loading...</span>
+    </div>
+</h6>
+
+<!-- When Data not Exists-->
+<h6 class="text-center pt-4"  [hidden]="!(listData!=null && listData.data.length==0)">
+    No Data
+</h6>
+
+<!--When No Data Matched-->
+<h6 class="text-center pt-4"  [hidden]="!(listData!=null && listData.filteredData.length==0 && listData.data.length > 0)">
+    No data matching the search keyword <strong><i> '{{search}}' </i></strong>
+</h6>

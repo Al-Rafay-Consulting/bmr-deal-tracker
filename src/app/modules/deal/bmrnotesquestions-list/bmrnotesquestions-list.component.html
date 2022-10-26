@@ -1,0 +1,64 @@
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 p-4" *ngIf="!isReply">
+           
+        <div class="mat-elevation-z8 table-responsive">
+            <mat-table [dataSource]="listData" matSort >
+                
+                <ng-container matColumnDef="Title">
+                    <mat-header-cell *matHeaderCellDef >
+                        <div style="display:flex; justify-content: space-between">
+                            <span>Topics</span> 
+                            <form class="col-lg-4 col-md-3 col-sm-8 col-9 example-form elem" >
+                                <form class="form-inline md-form active-pink-2 mt-0 mb-0">
+                                    <mdb-icon style="color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>
+                                    <input class="form-control form-control-sm  w-75 TopMenuSearchField" (keyup)="applyFilter()" [(ngModel)]="searchKey" name="searchKey"
+                                      type="text" placeholder="Search Topics" aria-label="Search"  mdbInput>
+                                  </form>
+                                </form>
+                            <button class="fontfamily" *ngIf="common.checkRole('AC')" mat-raised-button type="button" matTooltip="Add New" (click)="openDialog()" style="float:right;">
+                                    <mat-icon class="shadow-Icon-Color mr-1" style="font-size: 20px;">add</mat-icon> Add
+                            </button>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Subject">  
+                        <p class="replyBottom">
+                            <span class="d-inline-flex">
+                                    <mat-icon class="mr-1 audit-icon" >person</mat-icon>   
+                                    Created By {{element.Editor?.Title}} 
+                               - {{element.Created | date:'MM/dd/yyyy hh:mm aa'}} 
+                                </span>
+ 
+                            <span class="reply">
+                                
+                                <button class="matIconButtonsCustom-this fontfamily" mat-button matTooltip="View Comments" (click)="openReplies(element)">
+                                    View Comments
+                                </button>
+                            </span>
+                        
+                        </p>                     
+    
+                                     
+                        <p class="subject"> 
+                            <span class="sty">{{element.Question.Title}}<span class="bdg">{{element?.replyCount}}</span> <br> <p class="sty1" [innerHTML]="element.Reply"></p> </span>
+                            
+                        </p>
+
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+            </mat-table>
+        </div>
+        
+        <app-table-bottom-area [listData]="listData" [search]="searchKey">
+        </app-table-bottom-area>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 p-4" *ngIf="isReply">
+        <app-bmrnotesreplies [data]="currentQuestion" [replies]="replies" (onBack)="backToQuestions()" (onBottomSheetClose)="onBottomSheetClose($event)"></app-bmrnotesreplies>
+    </div>
+</div>
+

@@ -1,0 +1,325 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+
+    <div class="btn-group" role="group" aria-label="Basic example">
+
+      <a [hidden]="viewID == 0" class="stickyButtons elem" (click)="onBack()"  >
+          <button mdbBtn type="button" class="btn-sm">
+            <mdb-icon fas icon="angle-left" class="mr-1"></mdb-icon>Back
+          </button>
+      </a>
+      
+    
+      <a *ngIf="common.CheckIfUserhasAccess_Action('Vendor','Add')" (click)="onAdd()" style="color: #000000;" class="stickyButtons">
+        <button mdbBtn type="button"  class="btn-sm">
+          <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add
+        </button>
+      </a>
+
+      <a class="stickyButtons elem" (click)="frame.show()"  data-target="#basicExample">
+          <button mdbBtn type="button" class="btn-sm">
+            <mdb-icon fas icon="filter" class="mr-1"></mdb-icon>Filter
+          </button>
+      </a>
+
+    </div>
+
+    <app-export 
+    [exportFileName]="FileName" 
+    [exportData]="ExportData" 
+    [exportColumnNamesAndFormat]="ColumnNamesAndFormat" 
+    [exportHeader]="header" 
+    [exportFooter]='0'>      
+    </app-export>
+
+
+      <form class="col-lg-3 col-md-4 col-sm-8 col-9  example-form elem">
+        <form class="form-inline md-form active-pink-2 mt-0 mb-0">
+          <mdb-icon style="    color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>  
+          <input  class="form-control form-control-sm  w-60 TopMenuSearchField" (focus)="searchInput = true;" (blur)="searchInput = false;"  type="text" matInput [(ngModel)]="searchKey" name="searchKey" type="text" placeholder="Search Vendor" aria-label="Search"  (keyup)="applyFilter()" >                                            
+          <button mat-icon-button    matSuffix   type="button"   *ngIf="searchKey" (click)="onSearchClick()"> <mat-icon>clear</mat-icon></button>
+        </form>
+      </form>
+      <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12 PaginatorFixed IsSmallScreen">
+          <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+      </div>
+  </div>
+
+
+  <div style="overflow-y: auto" mdbModal #frame="mdbModal" class="modal fade right" id="frameModalTop" tabindex="-1" role="dialog"
+          aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+              <!--Header-->
+              <div class="modal-header">
+                <p class="heading lead">Filter
+                </p>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+                  <span aria-hidden="true" class="white-text">×</span>
+                </button>
+              </div>
+                           
+              <div class="modal-body">
+                               
+                <div class="text-left">                    
+                                                                            
+                    <div class="md-form" style="margin-top: 1rem !important;">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Industry</mat-label>
+                          <mat-select multiple  #multiSelectIndustry label="Industry" type="text" name="Industry" #Industry="ngModel"
+                            [(ngModel)]="IndustryID">
+                            <mat-option>                          
+                                <ngx-mat-select-search                                                    
+                                name="searchIndustryName"
+                                #searchIndustryName="ngModel"
+                                [(ngModel)]="searchIndustry"
+                                (ngModelChange)="AutoCompIndustry.searchResult.next($event)"
+                                placeholderLabel="Search..." 
+                                noEntriesFoundLabel="Not Found!">                                                      
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option                        
+                            disabled="disabled" 
+                            class="filter-option matCustomOption">                              
+                                <button 
+                                mat-icon-button
+                                color="primary"
+                                (click)="toggleSelectAll(false, 'Industry')">
+                                  <span><mat-icon>unpublished</mat-icon>Clear All</span>
+                                </button>
+                            </mat-option>
+                            
+                            <mat-option *ngFor="let option of AutoCompIndustry.results | async" [value]="option.ID">
+                              {{ option.Title }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="md-form" style="margin-top: 1rem !important;">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Specialty</mat-label>
+                          <mat-select multiple  #multiSelectSpecialty label="Specialty" type="text" name="Specialty" #Specialty="ngModel"
+                            [(ngModel)]="SpecialtyID">
+                            <mat-option>                          
+                                <ngx-mat-select-search                                                    
+                                name="searchSpecialtyName"
+                                #searchSpecialtyName="ngModel"
+                                [(ngModel)]="searchSpecialty"
+                                (ngModelChange)="AutoCompSpecialty.searchResult.next($event)"
+                                placeholderLabel="Search..." 
+                                noEntriesFoundLabel="Not Found!">                                                      
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option                        
+                            disabled="disabled" 
+                            class="filter-option matCustomOption">                              
+                                <button 
+                                mat-icon-button
+                                color="primary"
+                                (click)="toggleSelectAll(false, 'Specialty')">
+                                  <span><mat-icon>unpublished</mat-icon>Clear All</span>
+                                </button>
+                            </mat-option>
+                            <mat-option *ngFor="let option of AutoCompSpecialty.results | async" [value]="option.ID">
+                              {{ option.Title }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="md-form" style="margin-top: 1rem !important;">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>State</mat-label>
+                          <mat-select multiple  #multiSelectState label="State" type="text" name="State" #State="ngModel"
+                            [(ngModel)]="StateID">
+                            <mat-option>                          
+                                <ngx-mat-select-search                                                    
+                                name="searchStateName"
+                                #searchStateName="ngModel"
+                                [(ngModel)]="searchState"
+                                (ngModelChange)="AutoCompState.searchResult.next($event)"
+                                placeholderLabel="Search..." 
+                                noEntriesFoundLabel="Not Found!">                                                      
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option                        
+                            disabled="disabled" 
+                            class="filter-option matCustomOption">                              
+                                <button 
+                                mat-icon-button
+                                color="primary"
+                                (click)="toggleSelectAll(false, 'State')">
+                                  <span><mat-icon>unpublished</mat-icon>Clear All</span>
+                                </button>
+                            </mat-option>
+                            <mat-option *ngFor="let option of AutoCompState.results | async" [value]="option.ID">
+                              {{ option.Title }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="md-form" style="margin-top: 1rem !important;">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Accrual</mat-label>
+                          <mat-select  label="Accrual" type="text" name="Accrual" #Accrual="ngModel"
+                            [(ngModel)]="selectedAccrual">      
+                            <mat-option>-- Clear --</mat-option>                                                
+                            <mat-option [value]="true">Yes</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                                                                                                                
+                    <div class="row" style="margin-top: 1rem !important;">
+                      <div class="col-md-6">
+                        <button class="w-100 modalFiltersButton" mdbBtn color="info" size="md"   type="button" (click)="onFilterClick(frame)" mdbWavesEffect>
+                          <mdb-icon fas icon="filter" class="mr-1"></mdb-icon> Apply Filter
+                        </button>
+                      </div>
+                      <div class="col-md-6">
+                        <button class="w-100 modalFiltersButton" mdbBtn color="info" size="md" type="button" (click)="onFilterClear(frame)" mdbWavesEffect outline="true">
+                          <mdb-icon fas icon="minus" class="mr-1"></mdb-icon> Clear Filter
+                        </button>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+              </div>
+
+            </div>
+          </div>
+  </div>
+
+  <div class="row py-4">
+
+    <!--Grid column-->
+    <div class="col-lg-12 col-md-12">
+      <!--Card-->
+      <mdb-card cascade="true" narrower="true">
+        <!--Card image-->
+        <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+          <h4 class="h4-responsive">Vendor Information</h4>    
+          <!-- <div>
+              <div class="btn-group" role="group" aria-label="Basic example">                                       
+                <a (click)="openHomeForm()" mdbBtn    
+                   gradient="aqua" size="sm" data-toggle="modal" data-target="#basicExample"  mdbWavesEffect> 
+                  <mdb-icon fas icon="home" class="mr-1"></mdb-icon> Home
+                </a>
+              </div>      
+          </div>               -->
+        </div>
+        <!--/Card image-->
+
+        <div class="row card-text" [hidden]="filterText == ''">    
+            <div class="col-lg-7 col-md-7">
+                <div class="row AuditFields">
+                    <div class="col-md-12">
+                       {{filterText}}
+                    </div>           
+
+              </div>
+            </div>
+            <div class="col-lg-5 col-md-5">
+              <button mat-raised-button (click)="openDialog()">Save Filters As View</button>              
+              <button mat-raised-button class="ml-2" (click)="openContactList()">View Contacts by Filtered Vendors</button>
+            </div>
+        </div>
+  
+        <!--Card content-->
+        <mdb-card-body cascade="true">
+            <div class="col-md-12 col-sm-12 col-xs-12 IsBigScreen justify-content-center">            
+                <mat-paginator (page)="syncPrimaryPaginator($event)"  [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+                [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions" showFirstLastButtons></mat-paginator>                    
+                <br>                
+            </div>
+            
+          <div class="=row">                                                       
+            <div class="mat-elevation-z8 table-responsive difftab">
+              <mat-table [dataSource]="listData" matSort>
+                <ng-container matColumnDef="ID">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="ID">{{element.ID}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Title">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Vendor Name">{{element.Title}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="IndustryText">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Industry</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Industry">
+                      <!-- <span *ngFor="let indus of element.Industry.results; let index = index">
+                          <span *ngIf="index == 0">{{indus.Title}}</span>
+                          <span *ngIf="index > 0">, {{indus.Title}} </span>
+                      </span> -->
+                      {{element.IndustryText}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="SpecialtyText">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Specialty</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Specialty">                      
+                      <!-- <span *ngFor="let Spec of element.Specialty.results; let index = index">
+                          <span *ngIf="index == 0">{{Spec.Title}}</span>
+                          <span *ngIf="index > 0">, {{Spec.Title}} </span>
+                      </span> -->
+                      {{element.SpecialtyText}}
+                    </mat-cell>                    
+                </ng-container>
+                <ng-container matColumnDef="StateText">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>State</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="State">                      
+                      <!-- <span *ngFor="let Spec of element.State.results; let index = index">
+                          <span *ngIf="index == 0">{{Spec.Title}}</span>
+                          <span *ngIf="index > 0">, {{Spec.Title}} </span>
+                      </span> -->
+                      {{element.StateText}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Editor.Title">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Modified By</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Modified By">{{element.Editor.Title}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Modified">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Modified</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Modified">{{element.Modified | date:'MM/d/yyyy hh:mm aa'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="actions" >
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row" class="TableCommandButtons">
+
+                      <button mat-button  matTooltip="View"  *ngIf="common.CheckIfUserhasAccess_Action('Vendor','View')" (click)="onEdit(row)"  
+                      (click)="onEdit(row)" >
+                      <mat-icon class="flat-Icon-Color">visibility</mat-icon>                    
+                      </button>
+
+                    </mat-cell>
+                </ng-container>
+                
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns; let even = even" [ngClass]="{ 'make-whitesmoke' : even == true}"></mat-row>
+                
+              </mat-table>                  
+            </div> 
+            
+            <!-- Bottom Area of Table-->
+              <app-table-bottom-area 
+              [listData]="listData"
+              [search]="searchKey">
+              </app-table-bottom-area>
+
+          </div>
+         
+        </mdb-card-body>
+        <!--/.Card content-->
+      </mdb-card>
+      <!--/.Card-->
+    </div>
+    <!--Grid column-->
+  </div>

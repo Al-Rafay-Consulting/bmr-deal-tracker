@@ -1,0 +1,144 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Users','Add')" routerLink="/rbac/rbacusers/form" style="color: #000000;" class="stickyButtons">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add
+      </button>
+    </a>
+    </div> 
+    <form class="col-md-4 col-sm-8 col-9  example-form elem">
+      <form class="form-inline md-form active-pink-2 mt-0 mb-0">
+        <mdb-icon style="    color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>  
+        <input  class="form-control form-control-sm  w-75 TopMenuSearchField" (focus)="searchInput = true;" (blur)="searchInput = false;"  type="text" matInput [(ngModel)]="searchKey" name="searchKey" type="text" placeholder="Search Users" aria-label="Search"  (keyup)="applyFilter()" >                                            
+        <button mat-icon-button    matSuffix   type="button"   *ngIf="searchKey" (click)="onSearchClick()"> <mat-icon>clear</mat-icon></button>
+      </form>
+    </form>
+
+    <div class="col-md-7 col-sm-12 col-xs-12 PaginatorFixed IsSmallScreen">
+        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+    </div>
+
+
+</div>
+
+
+<div class="row py-4">
+
+    <!--Grid column-->
+    <div class="col-lg-12 col-md-12">
+      <!--Card-->
+      <mdb-card cascade="true" narrower="true">
+        <!--Card image-->
+        <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+          <h4 class="h4-responsive">RBAC Users</h4>
+       
+        </div>
+        <!--/Card image-->
+  
+        <!--Card content-->
+        <mdb-card-body cascade="true">
+          <div class="=row">   
+
+              <div class="col-md-12 col-sm-12 col-xs-12 IsBigScreen justify-content-center">            
+                  <mat-paginator (page)="syncPrimaryPaginator($event)"  [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+                  [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions" showFirstLastButtons></mat-paginator>                    
+                  <br>                
+              </div>
+
+              <div class="search-div col-md-8">                  
+                  <mdb-checkbox name="Active" #Active="ngModel" (change)="onCheckBoxChange()" [(ngModel)]="showAcitve">Active Users</mdb-checkbox>
+                  <mdb-checkbox name="Inactive" #Inactive="ngModel" (change)="onCheckBoxChange()" [(ngModel)]="showInacitve">Inactive Users</mdb-checkbox>
+                  <mdb-checkbox name="IsSystemGenerated" #IsSystemGenerated="ngModel" (change)="onCheckBoxChange()" [(ngModel)]="showSystemGenerated">System Generated</mdb-checkbox>
+                  <br>
+              </div>      
+
+              <div class="mat-elevation-z8 table-responsive difftab">
+                <mat-table [dataSource]="listData" matSort>
+                <ng-container matColumnDef="ID">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="ID">{{element.ID}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="UserId">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>User ID</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="User ID">{{element.UserId}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="FirstName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="First Name">{{element.FirstName}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="LastName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Last Name">{{element.LastName}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Inactive">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Inactive</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Inactive">{{element.Inactive == true? 'Yes' : 'No'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="IsSystemGenerated">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>System Generated</mat-header-cell>
+                    <mat-cell *matCellDef="let element" data-label="Inactive">{{element.IsSystemGenerated == true? 'Yes' : 'No'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="ModifiedDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Last Modified Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.ModifiedDate| date:'MM/d/yyyy'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="actions" >
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row" class="TableCommandButtons">
+                      <button 
+                      class="iconshadow"
+                     mdbBtn type="button" flat="true" size="md" mdbWavesEffect
+                     [matMenuTriggerFor]="menu"
+                     >
+                         <mdb-icon fas icon="ellipsis-h"></mdb-icon>
+                     </button>   
+
+                     <mat-menu #menu="matMenu" yPosition="below">   
+                       <button mat-menu-item *ngIf="common.CheckIfUserhasAccess_Action('Users','View')"
+                       (click)="onEdit(row)">
+                       <mat-icon>remove_red_eye</mat-icon>
+                         <span>View</span>
+                       </button>
+                     </mat-menu> 
+
+                        <!-- <a  (click)="onEdit(row)" mdbBtn floating="true"   size="sm"  placement="left" gradient="blue"  mdbTooltip="View" mdbWavesEffect>
+                            <mdb-icon fas icon="eye"></mdb-icon>
+                          </a>  -->
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="loading">
+                    <mat-footer-cell *matFooterCellDef>
+                        Loading...
+                        <div class="spinner-grow ml-2" role="status">                          
+                            <span class="sr-only float-right">Loading...</span>
+                        </div>
+                    </mat-footer-cell>                  
+                </ng-container>
+                
+                <ng-container matColumnDef="noData">
+                  <mat-footer-cell *matFooterCellDef>No Data </mat-footer-cell>                  
+                </ng-container>
+
+                <!-- Row shown when there is no matching data. -->
+                <ng-container matColumnDef="noSearchMatch">
+                  <mat-footer-cell *matFooterCellDef> {{searchNotFoundText}} &nbsp;<b> "{{searchKey}}" </b></mat-footer-cell>                  
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':listData!=null}" ></mat-footer-row>
+                <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(listData!=null && listData.data.length==0)}" ></mat-footer-row>
+                <mat-footer-row *matFooterRowDef="['noSearchMatch']" [ngClass]="{'hide':!(listData!=null && listData.filteredData.length==0)}" ></mat-footer-row>
+              </mat-table>
+              <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator> -->
+            </div>                                      
+        </div>
+        </mdb-card-body>
+        <!--/.Card content-->
+      </mdb-card>
+      <!--/.Card-->
+    </div>
+    <!--Grid column-->
+  </div>

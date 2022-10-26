@@ -1,0 +1,16 @@
+<div id="dndContainer">
+    <div class="noDroppedFile">
+        <span>Drag and drop files here</span> or 
+        <input type="file" multiple class="CursorHand" (change)="onFilesAdded($event.target.files)">        
+    </div>
+    <div *ngIf="fileStore.length>0">
+        <ol>
+            <li *ngFor="let file of fileStore; let i = index">
+                {{file.name}} |
+                <button title="Remove File" type="button" class="btn CursorHand" style="min-width: 0em;padding:0px 0px;color: red;"
+                    (click)="removeDroppedFile(i)"> X
+                </button>
+            </li>
+        </ol>
+    </div>
+</div>

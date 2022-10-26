@@ -1,0 +1,156 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+  <div class="btn-group" role="group" aria-label="Basic example">
+           
+    
+    <a (click)="onSubmit(rbacGroup)" class="stickyButtons" [hidden]="rbacGroup.invalid || IsInvalidForm || isView">
+        <button mdbBtn type="button" class="btn-sm" [disabled]="rbacGroup.invalid" [hidden]="isView">
+            <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+        </button>
+    </a>
+
+    <a routerLink="/rbac/rbacgroup/list" style="color: #000000;" class="stickyButtons" >
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="list" class="mr-1"></mdb-icon>View List
+      </button>
+    </a>
+
+  
+  
+    <a (click)="onReload(rbacGroup)" class="stickyButtons" >
+      <button mdbBtn *ngIf="isEdit || isCreated" type="button" class="btn-sm">
+        <mdb-icon fas icon="times" class="mr-1"></mdb-icon>Cancel
+      </button>
+    </a>
+
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Group','Add')" (click)="onCreate(rbacGroup)" class="stickyButtons" >
+      <button mdbBtn type="button"  *ngIf="!isCreated" class="btn-sm">
+        <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>New
+      </button>
+    </a>
+  
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Group','Edit')" (click)="onEdit()" class="stickyButtons" >
+      <button mdbBtn *ngIf="isView" type="button" class="btn-sm">
+        <mdb-icon fas icon="edit" class="mr-1"></mdb-icon>Edit
+      </button>
+    </a>
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Group','Delete')" (click)="onDelete(primaryKey)" class="stickyButtons" >
+      <button mdbBtn *ngIf="isEdit" type="button" class="btn-sm">
+        <mdb-icon fas icon="trash-alt" class="mr-1"></mdb-icon>Delete
+      </button>
+    </a>
+  </div>
+
+</div>
+
+<div class="row py-4">
+  
+    <div class="col-lg-12 col-md-12">    
+      <mdb-card cascade="true" narrower="true">      
+      
+        <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+  
+          <h4 class="h4-responsive">{{formTitle}}</h4>
+  
+        </div>
+
+        <div class="row card-text">          
+          <div class="col-sm-12">
+            <div class="row AuditFields">
+              <div class="col-md-12">
+                {{AuditDetails}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form #rbacGroup="ngForm" autocomplete="off" (ngSubmit)="onSubmit(rbacGroup)"> 
+        <mdb-card-body cascade="true">
+            <fieldset [disabled]="isView">
+              <div class="row">               
+                <div class="col-sm-4">
+  
+                </div>
+                <div class="col-sm-4">
+                                                 
+                        <mat-form-field [hidden]="true" class="example-full-width">
+                            <mat-label> ID</mat-label>
+                            <input  matInput class="MatInputBoxShadow"
+                            type="number" id="ID" 
+                             name="ID" #ID="ngModel" [(ngModel)]="formData.ID">                                                                  
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Group Name</mat-label>
+                            <input  matInput class="MatInputBoxShadow"
+                            type="text" id="GroupName" 
+                            required name="GroupName" #GroupName="ngModel" [(ngModel)]="formData.GroupName">                                      
+                            <mat-error *ngIf="GroupName.invalid && GroupName.dirty">This field is required</mat-error> 
+                        </mat-form-field>       
+                        
+                        <!-- <mdb-checkbox name="IsAdmin" #IsAdmin="ngModel" [(ngModel)]="formData.IsAdmin">
+                          Admin
+                        </mdb-checkbox> -->
+                  </div>                                
+                <div class="col-sm-4">
+  
+                </div>
+  
+              </div>
+
+              <div class="text-center">
+                  <button type="button" (click)="onSubmit(rbacGroup)" [disabled]="rbacGroup.invalid" [hidden]="isView" mdbBtn color="default" class="waves-light" mdbWavesEffect>
+                    <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+                  </button>
+              </div>
+
+              <br>
+
+              <div *ngIf="primaryKey !=0">
+                <!-- User -->
+                  <div class="row">
+                      <div class="col-sm-4">
+        
+                        </div>
+                    <div class="col-sm-4">
+                      <div>
+                        <h5 class="d-block p-2 bg-primary text-white gradient-card-header blue-gradient ChildTitle">Users </h5>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+        
+                    </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-sm-4"></div>
+                      <div class="col-sm-4">                                              
+                            <table mdbTable class="z-depth-1 InputTable">
+                                <thead>
+                                  <tr>                  
+                                    <th>Name </th>                                            
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor=" let us of usersList['RBAC_Users_Groups']; let i = index;" >                      
+                                    <td>{{us.RBAC_Users.FirstName + ' ' + us.RBAC_Users.LastName}}</td>                                                
+                                  </tr>                                  
+                                </tbody>
+                            </table>
+                        
+                      </div>
+                      <div class="col-sm-4"></div>
+                  </div>
+              </div>
+  
+            
+          </fieldset>
+                     
+        </mdb-card-body>      
+      </form>
+    </mdb-card>   
+    </div>  
+  </div>
+  
+  
+  

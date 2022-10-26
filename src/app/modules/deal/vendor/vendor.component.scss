@@ -1,0 +1,7 @@
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after{
+    color: black;
+}
+
+fieldset .disabled, :disabled .mat-select-value{
+    color: black !important;
+}

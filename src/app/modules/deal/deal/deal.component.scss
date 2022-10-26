@@ -1,0 +1,107 @@
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after{
+    color: black;
+}
+
+fieldset .disabled, :disabled .mat-select-value{
+    color: black !important;
+}
+
+.table td:first-of-type {    
+    text-transform:capitalize;
+    font-weight: normal;
+    color: #05a2c6 !important;
+    font-size: 13px;
+    padding-right: 5px;
+    width: 110px;
+    min-height: 20px;
+    height: auto;
+    
+  }
+
+
+  .contactTable td:first-of-type {    
+    text-transform:capitalize;
+    font-weight: normal;
+    color: #05a2c6 !important;
+    font-size: 13px;
+    padding-right: 5px;
+    width: 170px;
+    min-height: 20px;
+    height: auto;
+    
+  }
+.light-blue-skin input[type=text]:focus:not([readonly]){
+  border-color: white !important;
+  box-shadow: 0 0 0 0 white !important;
+}
+
+.alignment {
+  margin-top: 15px !important;
+
+}
+  @media screen and (max-width: 960px) {
+    .TableTest .table {
+      border: 0;
+      vertical-align: middle;
+    }
+
+    .TableTest > fieldset{
+        width: auto;
+    }
+    
+  
+    .TableTest .table caption {
+      font-size: 1em;
+    }
+
+    .TableTest thead{
+      display: none;
+  }
+  .TableTest  .table tr {
+      border-bottom: 5px solid #ddd;
+      display: block;
+    }
+
+    .TableTest  .table td {
+    //   border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: 12px;
+      text-align: right;
+      height: 100%;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-top: none !important;
+    }
+
+
+
+            
+    .TableTest td{
+        min-height: 30px;
+    }
+    .TableTest tfoot td{
+        min-height: 30px;
+    }
+    .TableTest .table td:before {
+
+      content: attr(data-label);
+      float: left;
+      text-transform:capitalize;
+      font-weight: normal;
+      color: #05a2c6 !important;
+      font-size: 12px;
+    }
+    .TableTest  .table td:last-child {
+      border-bottom: 0;
+    }
+    .TableTest .table td:first-child {
+      margin-top: 2%;
+      min-height: 50px;
+    }
+
+    .TableTest td:first-of-type, thead:first-of-type, tfoot:first-of-type {
+    // padding-left: 10px !important; 
+    margin-bottom: 0px;
+    }
+
+  }

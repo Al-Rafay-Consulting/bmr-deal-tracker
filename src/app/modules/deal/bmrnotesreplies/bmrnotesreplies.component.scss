@@ -1,0 +1,109 @@
+
+.mat-bottom-sheet-container{
+    padding: 14px 18px !important;
+}
+
+.padding-replies{
+  padding-top:0.8rem !important;
+}
+
+.createdBy-area{
+
+  display: inline-flex;
+  color: #6c859c;
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 13px;
+}
+
+.reply-header{
+  //margin-left: 15px;
+  //margin-right: 15px;
+  width: 100%;
+  //border: solid 1px #40a9e6;
+  padding: 8px;
+  border-radius: 4px 0px;
+  //background-color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reply-detail{
+  //margin-left: 15px;
+  margin-right: 15px;
+  width: 100%;
+  border: solid 1px #ddd;
+  padding: 8px;
+  padding: 8px;
+  border-radius: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.picArea{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: solid 1px #ccc;
+  color: #6c859c;
+  justify-content: center;
+}
+
+.matIconButtonsCustom-this{
+  background-color: #33b5e5;
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.w-98{
+  width: 98%;
+}
+
+
+.audit-icon{
+  font-size: 18px;
+  color: #40a9e6;
+}
+
+.question
+{
+  border-left: solid 5px #DDD;
+  padding: 6px 5px 10px 10px;
+  border-color: #40a9e6;
+  margin-bottom: 5px !important;
+  margin-left: 10px;
+  BORDER-RADIUS: 5px;
+}
+
+.audit{
+font-size: 14px;
+margin-top: 0rem;
+color: #6d6f71;
+}
+
+.recipient{
+  white-space: break-spaces;
+}
+
+
+.DatePosition{
+    float: right;
+}
+#profileImage {
+
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: #33b5e5;
+    font-size: 3.5rem;
+    color: #fff;
+    text-align: center;
+    line-height: 10rem;
+
+  }
+
+  .fontfamily{
+    font-family: 'Century Gothic' !important ;
+  }

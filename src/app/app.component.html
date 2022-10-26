@@ -1,0 +1,214 @@
+<!--Double navigation-->
+<header>
+  <!-- Sidebar navigation -->
+  <mdb-side-nav #sidenav class="sn-bg-1 " [fixed]="false">
+    <mdb-navbar-brand>
+      <li>
+        <div class="logo-wrapper waves-light">
+          <a href="#">
+            <!-- src="http://bmrnews/finance/deal-tracker/_layouts/15/DocIdRedir.aspx?ID=CPS3UU4EYWFU-1059314539-6" -->
+            <img
+              src="http://bmrnews/integration/deal-tracker/Documents/BioMed_logo.png"
+              
+              class="img-fluid flex-center" style="width:100%; padding-left:53px; padding-right: 63px; height: 100px;">
+          </a>
+        </div>
+      </li>
+    </mdb-navbar-brand>
+    <links>
+      <li>
+        <ul class="collapsible collapsible-accordion">
+          <mdb-accordion [multiple]="true" aria-multiselectable="false">
+            <!-- Quick links -->
+            <mdb-accordion-item [hidden]="common.CheckIfUserhasAccess('Admin Center')" [collapsed]="false">
+              <mdb-accordion-item-head mdbWavesEffect>
+                <i class="fas fa-cogs" style="font-size: 0.6rem;"></i> Quick Links
+              </mdb-accordion-item-head>
+              <mdb-accordion-item-body>
+                <ul>
+                  <!-- Quick links -->
+                  <li (click)="sidenav.hide()" *ngFor="let item of quickLinks" [hidden]="item.CheckPermission == false">
+                    <!-- router link -->
+                    <a *ngIf="(userName != 'visitor' && item.Label === 'New Deal Form' && item.LinkType == 'router') || (userName != 'visitor' && item.Label != 'New Deal Form' && item.LinkType == 'router') || (userName == 'visitor' && item.Label != 'New Deal Form' && item.LinkType == 'router')" target="{{item.Target}}" routerLink="{{item.URL}}" mdbWavesEffect>
+                      <mdb-icon fas icon="{{item.LabelIcon}}" style="width: 25px;"></mdb-icon>{{item.Label}}
+                    </a>
+                  </li>
+                    <li (click)="sidenav.hide()" *ngFor="let item of quickLinks" [hidden]="item.CheckPermission == false">
+                    <!-- href link -->
+                    <a *ngIf="item.LinkType == 'href'" target="{{item.Target}}" href="{{item.URL}}" mdbWavesEffect>
+                      <mdb-icon fas icon="{{item.LabelIcon}}" style="width: 25px;"></mdb-icon>{{item.Label}}
+                    </a>
+                  </li>
+                  <!-- Quick links END -->
+                </ul>
+              </mdb-accordion-item-body>
+            </mdb-accordion-item>
+            <!-- Admin center -->
+            <mdb-accordion-item *ngIf="common.checkRole('A')" [collapsed]="false">
+              <mdb-accordion-item-head mdbWavesEffect>
+                <i class="fas fa-cogs" style="font-size: 0.6rem;"></i>Admin Center
+              </mdb-accordion-item-head>
+              <mdb-accordion-item-body>
+                <ul>
+                  <!-- Admin center links from navigation list  -->
+                  <li (click)="sidenav.hide()" *ngFor="let item of adminCenterLinks" [hidden]="item.CheckPermission == false">
+                    <a target="{{item.Target}}"*ngIf="item.LinkType == 'router'" routerLink="{{item.URL}}" mdbWavesEffect>
+                      <mdb-icon fas icon="{{item.LabelIcon}}" style="width: 25px;"></mdb-icon>{{item.Label}}
+                    </a>
+                  </li>
+                  <li (click)="sidenav.hide()" *ngFor="let item of adminCenterLinks" [hidden]="item.CheckPermission == false">
+                    <a target="{{item.Target}}" *ngIf="item.LinkType == 'href'" href="{{item.URL}}" mdbWavesEffect>
+                      <mdb-icon fas icon="{{item.LabelIcon}}" style="width: 25px;"></mdb-icon>{{item.Label}}
+                    </a>
+                  </li>
+                  <!-- links from navigation list  END -->
+                </ul>
+              </mdb-accordion-item-body>
+            </mdb-accordion-item>
+          </mdb-accordion>
+        </ul>
+      </li>
+    </links>
+    <div class="sidenav-bg mask-strong"></div>
+  </mdb-side-nav>
+  <!--/. Sidebar navigation -->
+  <!-- Navbar -->
+  <mdb-navbar id="navTop" SideClass="navbar fixed-top navbar-toggleable-md navbar-expand-lg  double-nav"
+    [containerInside]="false">
+    <div class="col-md-4 col-sm-5 col-10">
+      <a (click)="sidenav.show()" class="iconshadow">
+        <mdb-icon fas icon="bars"></mdb-icon>
+      </a>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <a routerLink="/home" mdbWavesEffect>
+            <mdb-icon fas icon="home" style="width: 25px;"></mdb-icon>Home
+          </a>
+        </button>
+        <button mat-menu-item>
+          <a target="_blank" href="{{homepage}}" mdbWavesEffect>
+            <mdb-icon fas icon="external-link-alt" style="width: 25px;"></mdb-icon>{{homepageTitle}}
+          </a>
+        </button>
+        <button mat-menu-item>
+          <a target="_blank" href="{{siteContentLink}}" mdbWavesEffect>
+            <mdb-icon fas icon="tools" style="width: 25px;"></mdb-icon>SharePoint Site Contents
+          </a>
+        </button>
+      </mat-menu>
+      <a class="pl-3 AppIcon" routerLink="/home">
+        <!-- <img *ngIf="AppLogoImg" [src]="AppLogoImg" alt="image">     -->
+        <h4 style="display: inline-flex;">BioMed Deal Tracker</h4>
+      </a>
+      <div [hidden]="true"> Seconds: {{intervalId}} / API call count : {{ApiCallCount}} </div>
+    </div>
+    <!-- <div class="col-md-3 col-sm-4 col-5">
+      <a routerLink="/home" [title]="'Event Management Automated Platform'" >
+          <img [src]="AppLogoImg" alt="image">
+      </a>
+    </div> -->
+    <div class="col-md-8 col-sm-4 col-1 text-right align-middle" [hidden]="common.hideGlobalSearch == false">
+      <mat-form-field appearance="outline" class="matSearchFields d-none d-sm-none d-md-inline d-xl-inline d-lg-inline"
+        style="float:right">
+        <mat-icon matPrefix class="mr-2">search</mat-icon>
+        <input matInput placeholder="Search by Deal Name, Market or Sub-Market" [matAutocomplete]="auto"
+          [formControl]="searchContactCtrl">
+        <button mat-button *ngIf="searchContactCtrl.value" matSuffix mat-icon-button aria-label="Clear"
+          (click)="searchContactCtrl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete class="matSearchFieldsOptions" #auto="matAutocomplete"
+          (optionSelected)="onContactClick($event.option.value)">
+          <mat-option *ngIf="isLoading" class="is-loading" disabled><span matSuffix
+              class="spinner-border spinner-border-sm mr-2"></span>Searching... </mat-option>
+          <mat-option disabled *ngIf="contactData.length > 0 && !isLoading"
+            style=" position: sticky;top: 0;z-index: 1;background-color: white; line-height:22px;border-bottom: 1px solid #d6d6d8; text-align: center; color: gray;">
+            Results found: {{contactData.length}}
+          </mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let event of contactData" [value]="event.ID" style="font-size:14px;line-height:22px;border-bottom: 1px solid #d6d6d8;padding-top: 4px;
+            padding-bottom: 4px; height:150px;">
+              <a>
+                <b style=" font-size: 16px">
+                  {{event.Title}}
+                </b>
+                <br>
+                <b style="font-weight: 500; font-size: 13px; color:gray">
+                  Market: {{event.Market.Title}}
+                  <br>
+                  Sub-Market: {{event.SubMarket.Title}}
+                  <br>
+                  Deal Type: {{event.DealType.Title}}
+                  <br>
+                  Project Type: {{event.ProjectType.Title}}
+                  <br>
+                  Status: {{event.Status.Title}}
+                </b>
+              </a>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mdb-icon fas icon="search" class="d-inline d-sm-inline d-md-none d-xl-none d-lg-none align-bottom"
+        (click)="test.toggle()"></mdb-icon>
+    </div>
+    <div class="col-12 col-sm-12 mt-2" mdbCollapse #test="bs-collapse">
+      <mat-form-field appearance="outline" class="matSearchFields d-inline d-sm-inline d-md-none d-xl-none d-lg-none">
+        <mat-icon matPrefix class="mr-2">search</mat-icon>
+        <input matInput placeholder="Search by Deal ID or Name..." [matAutocomplete]="auto"
+          [formControl]="searchContactCtrl">
+        <button mat-button *ngIf="searchContactCtrl.value" matSuffix mat-icon-button aria-label="Clear"
+          (click)="searchContactCtrl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete class="matSearchFieldsOptions" #auto="matAutocomplete"
+          (optionSelected)="onContactClick($event.option.value)">
+          <mat-option *ngIf="isLoading" class="is-loading" disabled><span matSuffix
+              class="spinner-border spinner-border-sm mr-2"></span>Searching... </mat-option>
+          <mat-option disabled *ngIf="contactData.length > 0 && !isLoading"
+            style=" position: sticky;top: 0;z-index: 1;background-color: white; line-height:22px;border-bottom: 1px solid #d6d6d8; text-align: center; color: gray;">
+            Results found: {{contactData.length}}
+          </mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let event of contactData" [value]="event.ID" style="font-size:14px;line-height:22px;border-bottom: 1px solid #d6d6d8;padding-top: 4px;
+            padding-bottom: 4px; height:78px;">
+              <a>
+                <b style=" font-size: 16px">
+                  {{event.Title + ' ' + event.LastName}}
+                </b>
+                <br>
+                <b style="font-weight: 500; font-size: 13px; color:gray">
+                  Vendor: {{event.Vendor?.Title}} | Job Title: {{event.JobTitle}} | Email: {{event.Email}} | Website:
+                  {{event.Website}} | Contact: {{event.Contact | mask: '(000) 000-00000'}} | Address: {{event.Address}}
+                </b>
+              </a>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </mdb-navbar>
+  <!--/. Navbar -->
+</header>
+<!--/.Double navigation-->
+<!--Main Layout-->
+<main>
+  <div class="container-fluid ">
+    <router-outlet></router-outlet> 
+      <a mdbBtn floating=" true"   size="md" placement="right" gradient="blue"  mdbWavesEffect mdbPageScroll
+    href="#navTop" style="right:25px; bottom:30px; position: fixed; z-index: 8" [pageScrollDuration]="1">
+    <mdb-icon fas icon="arrow-up"></mdb-icon>
+    </a>
+  </div>
+  <br>
+  <br>
+  <br>
+</main>
+<!-- <ngx-spinner  type="ball-spin-clockwise"></ngx-spinner> -->
+<!-- <ngx-spinner
+  bdColor="rgba(0, 0, 0, 1)">
+  template="<img src='https://media.giphy.com/media/o8igknyuKs6aY/giphy.gif' />"
+</ngx-spinner> -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true">
+  <!-- <img *ngIf="AppLogoImg" [src]="AppLogoImg" alt="image"> -->
+</ngx-spinner>

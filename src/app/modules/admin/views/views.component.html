@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{data.heading}}</h1>
+
+<div mat-dialog-content>
+  <!-- <p>Enter View Name</p> -->
+  <mat-form-field appearance="fill">
+    <mat-label>View Name</mat-label>
+    <input  matInput [(ngModel)]="viewName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button type="button" mat-button (click)="onNoClick()">Cancel</button>
+  <button type="button" mat-button (click)="onSave()" cdkFocusInitial>Save</button>
+  <!-- <button mat-button (click)="onSave()" [mat-dialog-close]="viewName" cdkFocusInitial>Save</button> -->
+</div>

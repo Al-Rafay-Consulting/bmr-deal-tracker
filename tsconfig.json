@@ -1,0 +1,39 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    //"target": "es5",
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "ng-uikit-pro-standard": [
+        "dist/ng-uikit-pro-standard/ng-uikit-pro-standard",
+        "dist/ng-uikit-pro-standard"
+      ],
+      "exceljs": [
+        "node_modules/exceljs/dist/exceljs.min.js"
+      ]
+    },
+    "resolveJsonModule": true
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

@@ -1,0 +1,182 @@
+
+<div class="" id="content">
+
+  <div class="">
+
+    <div>
+      <div class="row text-center">
+
+        <div id="buttonsShow" class=" col-sm-12 col-md-4 calendar_buttonRow">
+
+          <div class="btn-group CalendarActionButton float-left">
+            <button mdbBtn type="button" color="info" class="waves-light CalendarNavButtons" mwlCalendarPreviousView
+              [view]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay(viewDate)" mdbWavesEffect>
+              <mdb-icon fas icon="angle-left"></mdb-icon>
+            </button>
+            <button mdbBtn type="button" color="info" class="waves-light CalendarNavButtons" mwlCalendarToday
+              [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay(viewDate)" mdbWavesEffect>Today</button>
+            <button mdbBtn type="button" color="info" class="waves-light CalendarNavButtons" mwlCalendarNextView
+              [view]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay(viewDate)" mdbWavesEffect>
+              <mdb-icon fas icon="angle-right"></mdb-icon>
+            </button>
+            <mat-form-field appearance="fill" class="matDateFieldCalendar ">
+              <mat-label>Jump to Month</mat-label>
+              <input matInput [matDatepicker]="picker" [value]="viewDate"
+                (dateChange)="filterCalendar('change', $event)">
+              <mat-datepicker-toggle matSuffix [for]="picker" style="    color: #33b4e4;"></mat-datepicker-toggle>
+              <mat-datepicker #picker startView="year" (monthSelected)="chosenMonthHandler($event, picker)"
+                panelClass="example-month-picker">
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class=" col-sm-12 col-md-4 text-center calendar_buttonRow">
+          <h1 class="MonthHeading">
+            <mdb-badge *ngIf="view === CalendarView.Month" color="white" style="color: gray !important;">
+              {{ viewDate | date:'MMMM, yyyy' }}
+            </mdb-badge>
+
+          </h1>
+        </div>
+
+        <div class=" col-sm-12 col-md-4  calendar_buttonRow">
+
+          <!-- <div class="btn-group CalendarActionButton float-right" role="group" aria-label="Basic example">
+            <button mdbBtn type="button" color="info" class="waves-light CalendarNavButtons"
+              (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month"
+              mdbWavesEffect>Month</button>
+            <button mdbBtn [disabled]="true" type="button" color="info" class="waves-light CalendarNavButtons"
+              (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week"
+              mdbWavesEffect>Week</button>
+            <button mdbBtn [disabled]="true" type="button" color="info" class="waves-light CalendarNavButtons"
+              (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day" mdbWavesEffect>Day</button> 
+
+          </div>-->
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+
+      <!-- (dayClicked)="OpenEventModal($event)" -->
+
+      <div [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+          [refresh]="refresh" (eventTimesChanged)="eventTimesChanged($event)" [cellTemplate]="customCellTemplate"
+          (columnHeaderClicked)="clickedColumn = $event.isoDayNumber" [tooltipTemplate]="cellTooltipTemplate">
+        </mwl-calendar-month-view>
+      </div>
+    </div>
+
+
+
+  </div>
+  <br>
+
+
+
+<br /><br /><br />
+
+<ng-template #customCellTemplate let-day="day" let-locale="locale" let-eventClicked="eventClicked"
+  let-tooltipPlacement="tooltipPlacement" let-tooltipTemplate="tooltipTemplate"
+  let-tooltipAppendToBody="tooltipAppendToBody" let-tooltipDelay="tooltipDelay">
+
+
+
+  <div class="cal-cell-top">
+    <div class="">
+      <div class="">
+        <span class="cal-day-number">
+          {{ day.date | calendarDate:'monthViewDayNumber':locale }}
+        </span>
+      </div>
+    </div>
+
+
+        <div class="cal-cell-top">
+  
+          <div class="">
+
+
+          </div>
+        </div>
+    <div class="cal-events" *ngFor="let event of day.events"
+
+      [mwlCalendarTooltip]="event.title | calendarEventTitle: 'monthTooltip':event"
+      [tooltipPlacement]="tooltipPlacement" [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate"
+      [tooltipAppendToBody]="tooltipAppendToBody" [tooltipDelay]="tooltipDelay"
+      [style.backgroundColor]="event.color?.primary" [style.Color]="event.color?.secondary" class="CalendarEventTile"
+      (mwlClick)="eventClicked.emit({event: event})" [matMenuTriggerFor]="menu" [hidden]="event.title == null">
+      <div>
+        {{event.title}}
+      </div>
+
+      <mat-menu #menu="matMenu" yPosition="below">
+
+        <button mat-menu-item data-toggle="modal" data-target="#basicExample" (click)="onEdit(event); ">
+          <mat-icon>remove_red_eye</mat-icon>
+          <span>View Deal</span>
+        </button>
+      </mat-menu>
+      <!-- <div style="color: black; padding: 10%; padding-left: 30%;">
+        {{event.title}}
+      </div> -->
+    </div>
+
+  </div>
+
+
+</ng-template>
+
+
+<ng-template #cellTooltipTemplate let-event="event" let-tooltipPlacement="tooltipPlacement" let-locale="locale">
+
+  <div class="cal-tooltip IsMobile">
+
+    <div class="cal-tooltip-arrow"></div>
+
+
+              
+    <div class="cal-tooltip-inner EventToolTip" [tooltipPlacement]="tooltipPlacement"
+      style="background-color:transparent">
+
+      <div class="TableToolTipCalendar" style="background-color: white;">
+        <table mdbTable class="z-depth-1 InputTable">
+          <tbody>
+            <tr>
+              <td data-label="Deal Name">{{event.title}}</td>
+              <td data-label="Address">{{event.meta.Address?event.meta.Address:"-"}}</td>
+              <td data-label="Status">{{event.meta.Status}}</td>
+              <td data-label="Funds">{{event.meta.Funds?event.meta.Funds:"-"}}</td>
+              <!-- <td data-label="Funds">{{event.Funds}}</td> -->
+              <td data-label="Description">{{event.meta.DateDescription?event.meta.DateDescription:"-"}}</td>
+              <td data-label="Event">{{event.meta.EventList?event.meta.EventList:"-"}}</td>
+              <td *ngIf="event.meta.EventList == 'Other'" data-label="Additional">{{event.meta.EventListText}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</ng-template>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-right">
+      <stimulsoft-viewer-angular #viewer                     
+            [height]="'2200px'">
+                </stimulsoft-viewer-angular> 
+
+  </div>
+</div>

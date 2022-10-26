@@ -1,0 +1,30 @@
+<div>
+  <div class="content-container dialogHeader">
+    <!-- <h6>Error</h6> -->
+    <a mdbBtn floating="true" size="sm" gradient="blue" mdbTooltip="Close" placement="left" class="float-right"
+      (click)="closeDialoge()" mdbWavesEffect>
+      <mdb-icon fas icon="times"></mdb-icon>
+    </a>
+  </div>
+  <!-- <hr> -->
+  <br>
+  <br>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span style="color: red;" class="content-span full-width">
+          <mdb-icon fas icon="exclamation-triangle" class="mr-2"></mdb-icon>{{data.message}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="btn-group dialogBtn" role="group" aria-label="Button group with nested dropdown">
+    <button mdbBtn type="button" color="info" class="waves-light" mdbWavesEffect [mat-dialog-close]="true">
+      <mdb-icon fas icon="check" class="mr-1"></mdb-icon>
+      Ok
+    </button>
+  </div>
+</div>

@@ -1,0 +1,246 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop">
+  <div class="btn-group" role="group" aria-label="Basic example">
+
+   
+    <a (click)="onSubmit(Vendor)" class="stickyButtons" [hidden]="Vendor.invalid || IsInvalidForm || isView || validateMultiFilters() == true">
+      <button mdbBtn type="button" class="btn-sm" [disabled]="Vendor.invalid" [hidden]="isView">
+        <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+      </button>
+    </a>
+
+    <a (click)="openVendorList()" style="color: #000000;" class="stickyButtons">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="list" class="mr-1"></mdb-icon>List
+      </button>
+    </a>
+
+    <a (click)="onReload(Vendor)" class="stickyButtons">
+      <button mdbBtn *ngIf="isEdit || isCreated" type="button" class="btn-sm">
+        <mdb-icon fas icon="redo-alt" class="mr-1"></mdb-icon>Reload
+      </button>
+    </a>
+
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Vendor','Add')"   (click)="onCreate(Vendor)" class="stickyButtons">
+      <button mdbBtn type="button" *ngIf="!isCreated" class="btn-sm">
+        <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>New
+      </button>
+    </a>
+
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Vendor','Edit')" (click)="onEdit()" class="stickyButtons">
+      <button mdbBtn *ngIf="isView" type="button" class="btn-sm">
+        <mdb-icon fas icon="edit" class="mr-1"></mdb-icon>Edit
+      </button>
+    </a>
+    <a *ngIf="common.CheckIfUserhasAccess_Action('Vendor','Delete')" (click)="onDelete(primaryKey)"
+      class="stickyButtons">
+      <button mdbBtn *ngIf="isEdit" type="button" class="btn-sm">
+        <mdb-icon fas icon="trash-alt" class="mr-1"></mdb-icon>Delete
+      </button>
+    </a>
+  </div>
+
+</div>
+<div class="row py-4">
+
+  <div class="col-lg-12 col-md-12">
+    <mdb-card cascade="true" narrower="true">
+
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+        <h4 class="h4-responsive">{{formTitle}}</h4>
+
+      </div>
+
+
+      <mat-tab-group>
+          <mat-tab label="Details"> 
+              <div class="row card-text">
+                  <div class="col-sm-12">
+                    <div class="row AuditFields">
+                      <div class="col-md-12">
+                        {{AuditDetails}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          
+                <form #Vendor="ngForm" autocomplete="off" (ngSubmit)="onSubmit(Vendor)"> 
+                  <mdb-card-body cascade="true">
+          
+          
+                    <fieldset [disabled]="isView">
+                      <div class="row">
+                        <div class="col-sm-4" [hidden]="true">
+                          <div class="md-form">
+          
+                            <input name="ID" #ID="ngModel" [(ngModel)]="formData.ID" type="text" class="form-control" mdbInput>
+                            <label>Vendor ID</label>
+          
+                          </div>
+                        </div>
+          
+                        <div class="col-sm-4"></div>
+          
+          
+                        <div class="col-sm-4">
+          
+                          <mat-form-field class="example-full-width">
+          
+                            <mat-label>Vendor Name</mat-label>
+          
+                            <input matInput class="MatInputBoxShadow" required name="Title" #Title="ngModel"
+                              [(ngModel)]="formData.Title" type="text">
+          
+                            <mat-error *ngIf="Title.invalid && Title.dirty">This field is required</mat-error>
+          
+                          </mat-form-field>
+          
+                        
+          
+                        
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Industry</mat-label>
+                            <mat-select [multiple]="true" required [(ngModel)]="selectedIndustryID" #IndustryID [ngModelOptions]="{standalone: true}" >
+                              <mat-option *ngFor="let option of AutoCompIndustry.results | async" [value]="option.ID">
+                                {{ option.Title }}
+                              </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="IndustryId.invalid && IndustryId.dirty">This field is required</mat-error> -->
+                          </mat-form-field>
+                       
+                      
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Specialty</mat-label>
+                            <mat-select [multiple]="true" required [(ngModel)]="selectedSpecialtyID" #SpecialtyId [ngModelOptions]="{standalone: true}" >
+                              <mat-option *ngFor="let option of AutoCompSpecialty.results | async" [value]="option.ID">
+                                {{ option.Title }}
+                              </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="SpecialtyId.invalid && SpecialtyId.dirty">This field is required</mat-error> -->
+                          </mat-form-field>
+                        
+                          <mat-form-field class="example-full-width">
+                            <mat-label>State</mat-label>
+                            <mat-select [multiple]="true"  required [(ngModel)]="selectedStateID" #StateId [ngModelOptions]="{standalone: true}" >
+                              <mat-option *ngFor="let option of AutoCompState.results | async" [value]="option.ID">
+                                {{ option.Title }}
+                              </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="StateId.invalid && StateId.dirty">This field is required</mat-error> -->
+                          </mat-form-field>
+
+                          <mat-checkbox #Accrual="ngModel" name="Accrual" [(ngModel)]="formData.Accrual">
+                              Accrual
+                          </mat-checkbox>
+          
+                        </div>
+                       
+          
+                      </div>
+          
+          
+                      <div class="text-center">
+                        <button type="button" (click)="onSubmit(Vendor)" [disabled]="Vendor.invalid || validateMultiFilters()" [hidden]="isView" mdbBtn
+                          color="default" class="waves-light" mdbWavesEffect>
+                          <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+                        </button>
+                      </div>
+                    </fieldset>
+
+                  <br>
+              
+                  <div class="col-md-12" [hidden]="primaryKey == 0">
+                    <div>
+                      <h5 class="d-block p-2 bg-primary text-white gradient-card-header blue-gradient ChildTitle ">
+                        Contact List
+                      </h5>
+                    </div>
+                  </div>
+               
+                  <br>
+
+                  <div class="col-md-12" [hidden]="primaryKey == 0">
+                    <div class="table-responsive TableTest">
+                          
+                              <table mdbTable class="z-depth-1">
+                                  <thead>
+                                      <tr>
+                                          <th>
+                                              <button mat-button type="button" class="flat-Icon-Color"  matTooltip="Add New Contact"                                             
+                                               (click)="openContactForm()">
+                                              <mat-icon>add</mat-icon>                   
+                                              </button>  
+                                          </th>
+                                          <th [hidden]="true">Contact Person ID</th>
+                                          <th>Contact Name</th>
+                                          <th>Job Title</th>
+                                          <th>Contact #</th>
+                                          <th>Email Address </th>
+                                      </tr>
+                                  </thead>                               
+                                  <tbody>
+                                      <tr *ngFor="let cp of clientList; let i = index;">
+                                          <td class="TableCommandButtons" style="padding-top: inherit !important; padding-bottom: inherit !important;">
+                                            
+                                              <!-- <button 
+                                              class="iconshadow"
+                                              mdbBtn type="button" flat="true" size="md" mdbWavesEffect
+                                              [matMenuTriggerFor]="menu">
+                                                  <mdb-icon fas icon="ellipsis-h"></mdb-icon>
+                                              </button> 
+                    
+                                              <mat-menu #menu="matMenu" yPosition="below">   
+                                                <button mat-menu-item
+                                                (click)="onContactEdit(cp)">
+                                                  <mat-icon>create</mat-icon>
+                                                  <span>Edit</span>
+                                                </button>                                              
+                                              </mat-menu> -->
+
+                                              <button mat-button  matTooltip="View" (click)="onContactEdit(cp)"  >
+                                              <mat-icon class="flat-Icon-Color">visibility</mat-icon>                    
+                                              </button>
+
+                                          </td>
+                                          <td [hidden]="true"> {{cp.ID}}</td>
+                                          <td data-label="Contact Name"> {{cp.Title + ' ' + cp.LastName}}</td>
+                                          <td data-label="Job Title"> {{cp.JobTitle}}</td>                                      
+                                          <td data-label="Contact #"> {{cp.Contact  | mask: '(000) 000-00000'}}</td>
+                                          <td data-label="Email Address"> {{cp.Email}}</td>
+                                          
+                                      </tr>
+                                  </tbody> 
+                              </table>
+                          
+                    </div>
+                  </div>
+          
+                  </mdb-card-body>
+                </form>
+          </mat-tab>
+          <mat-tab label="Notes"> 
+
+            <app-vendor-notes-list                 
+            [input_vendorNotesList]="vendorNotesList" 
+            [ifAddButton]="true"
+            [vendorID]="primaryKey"
+            (addNoteEvent)="onNotesAdded($event)">
+            </app-vendor-notes-list>
+            <br>
+
+            <div class="text-left">
+                <button type="button" (click)="onSubmit(Vendor)" [disabled]="Vendor.invalid || validateMultiFilters() == true" [hidden]="isView" mdbBtn color="default" class="waves-light" mdbWavesEffect>
+                    <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+                </button>
+            </div>
+
+          </mat-tab>
+         
+      </mat-tab-group>
+
+     
+    </mdb-card>
+  </div>
+</div>
+
+

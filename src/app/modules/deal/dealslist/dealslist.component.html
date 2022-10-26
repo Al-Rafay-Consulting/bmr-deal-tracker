@@ -1,0 +1,333 @@
+<div class="row fixed-top my-1 pl-4 pr-3 stickyMenuTop">
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a class="stickyButtons elem" (click)="onBack()">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="home" class="mr-1"></mdb-icon>Home
+      </button>
+    </a>
+    <a (click)="openNewDealList()" *ngIf="common.checkRole('AC')"   style="color: #000000;"
+      class="stickyButtons">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>Add
+      </button>
+    </a>
+    <a class="stickyButtons elem" (click)="frame.show()" data-target="#basicExample">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="filter" class="mr-1"></mdb-icon>Filter
+      </button>
+    </a>
+    <a *ngIf="selectedChipViewName == 'C'" (click)="SavePDF()" style="color: #000000;" class="stickyButtons">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="save" class="mr-1"></mdb-icon>Print to PDF
+      </button>
+    </a>
+
+    <!-- <div>
+        <div [hidden]="parent == ''" class="btn-group" role="group" aria-label="Basic example">
+          <a (click)="onBack()" mdbBtn    
+             gradient="aqua" size="sm" data-toggle="modal" data-target="#basicExample"  mdbWavesEffect>
+            <mdb-icon fas icon="angle-left" class="mr-1"></mdb-icon> Back
+          </a>
+        </div>
+      </div>
+     -->
+  </div>
+
+  <form class="col-lg-4 col-md-3 col-sm-8 col-9 example-form elem" *ngIf="selectedChipViewName == 'L'">
+    <form class="form-inline md-form active-pink-2 mt-0 mb-0">
+      <mdb-icon style="color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>
+      <input class="form-control form-control-sm  w-75 TopMenuSearchField" [(ngModel)]="searchKey" name="searchKey"
+        type="text" placeholder="Search Deals" aria-label="Search" (keyup)="applyFilter()" mdbInput>
+      <button style="margin: 0px;" placement="left" mdbTooltip="Clear" matSuffix class="TableSearchCloseBtn" mdbBtn
+        type="button" flat="true" size="md" mdbWavesEffect *ngIf="searchKey" (click)="onSearchClick()">
+        <mdb-icon fas icon="times" aria-hidden="true"></mdb-icon>
+      </button>
+    </form>
+  </form>
+  <div class="col-lg-5 col-md-9 col-sm-12 col-xs-12 PaginatorFixed IsSmallScreen" [hidden]="selectedChipViewName != 'L'">
+    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>
+<div class="row" >
+  <div class="col-lg-4 col-md-12" id="ChipsExport">
+    <div (click)="onChipViewClick('L')" class="chip" [ngClass]="{'selectedView':selectedChipViewName == 'L' }">
+      <mdb-icon fas icon="th-list"></mdb-icon>
+      List View
+    </div>
+    <div (click)="onChipViewClick('G')" class="chip" [ngClass]="{'selectedView':selectedChipViewName == 'G' }">
+      <mdb-icon fas icon="globe-europe"></mdb-icon>
+      Map View
+    </div>
+    <div (click)="onChipViewClick('C')" class="chip" [ngClass]="{'selectedView':selectedChipViewName == 'C' }">
+      <mdb-icon fas icon="calendar-alt"></mdb-icon>
+      Calendar View
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-12" style="text-align: right;" *ngIf="selectedChipViewName == 'L'">
+    <div (click)="onChipStatusClick('Status')" class="chip" [ngClass]="{'selectedChip':selectedChipStatusName == 'Status' }">
+      <div class="chipArea" style="border: solid;border-width: 1px;border-color: #d1dee3;text-align:center;">
+        S
+      </div> By Status
+    </div>
+    <div (click)="onChipStatusClick('Market')" class="chip" [ngClass]="{'selectedChip':selectedChipStatusName == 'Market' }">
+      <div class="chipArea" style="border: solid;border-width: 1px;border-color: #d1dee3;text-align:center;">
+        M
+      </div> By Market
+    </div>
+    <div (click)="onChipStatusClick('Projecttype')" class="chip" [ngClass]="{'selectedChip':selectedChipStatusName == 'Projecttype' }">
+      <div class="chipArea" style="border: solid;border-width: 1px;border-color: #d1dee3;text-align:center;">
+        P
+      </div> By BX/BMR Workstreams
+    </div>
+
+  </div>
+  <!-- <div class="col-lg-8 col-md-12 " id="CalendarChips" style="text-align: right;" *ngIf="selectedChipViewName == 'C'">
+   <div class="chip"  style="margin-bottom: 1.5rem !important;" *ngFor="let m of ModuleOptions ; let i = index;">
+      <div class="chipArea" [ngStyle]="{background:m.ColorCode}" > 
+      </div> 
+      {{m.Title}} 
+    </div> 
+  </div> -->
+
+
+  <div id="CalendarChips" class="col-lg-8 col-md-12" style="    text-align: right;
+  display: flex;
+  color: white;
+  flex-direction: row-reverse;
+  align-content: space-between;
+  align-items: flex-start;" *ngIf="selectedChipViewName == 'C'">
+
+    <div *ngFor="let m of ModuleOptions ; let i = index;">
+      <p style="margin-right: 10px !important;    padding: 5px 27px 5px 27px;
+      font-size: 15px;color: white;" [ngStyle]="{background:m.ColorCode}">      {{m.Title}} </p>
+
+
+    </div>
+
+  </div>
+</div>
+<div style="overflow-y: auto" mdbModal #frame="mdbModal" class="modal fade right" id="frameModalTop" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading lead">Filter
+        </p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-left">
+          <div class="md-form" style="margin-top: 1rem !important;">
+            <mat-form-field class="example-full-width">
+                <mat-label>Year</mat-label>
+                <mat-select [multiple]="true" #Year (ngModelChange)="AutoCompYear.searchResult.next($event)" label="Year" type="text" name="YearID" #YearID="ngModel"
+                    [(ngModel)]="YearName">
+                    <mat-option (click)="toggleAllSelection('Year')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompYear.results | async " [value]="option.ID">
+                        {{ option.Title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+          <div class="md-form" style="margin-top: 1rem !important;">
+            <mat-form-field class="example-full-width">
+                <mat-label>Status</mat-label>
+                <mat-select [multiple]="true" #Status (ngModelChange)="AutoCompStatus.searchResult.next($event)" label="Status" type="text" name="StatusID" #StatusID="ngModel"
+                    [(ngModel)]="StatusName">
+                    <mat-option (click)="toggleAllSelection('Status')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompStatus.results | async " [value]="option.ID">
+                        {{ option.Title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="md-form" style="margin-top: 1rem !important;">
+          <mat-form-field class="example-full-width">
+              <mat-label>Market</mat-label>
+              <mat-select [multiple]="true" #Market (ngModelChange)="AutoCompMarket.searchResult.next($event)" label="Market" type="text" name="MarketID" #MarketID="ngModel"
+                  [(ngModel)]="MarketName">
+                  <mat-option (click)="toggleAllSelection('Market')">-- Select All --</mat-option>
+                  <mat-option *ngFor="let option of AutoCompMarket.results | async " [value]="option.ID">
+                      {{ option.Title }}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+          <div class="md-form" style="margin-top: 1rem !important;">
+            <mat-form-field class="example-full-width">
+              <mat-label>Project Type</mat-label>
+              <mat-select  [multiple]="true" #ProjectType (ngModelChange)="AutoCompProjectType.searchResult.next($event)" label="ProjectType" type="text" name="ProjectTypeID" #ProjectTypeID="ngModel"
+                    [(ngModel)]="ProjectTypeName">
+                    <mat-option (click)="toggleAllSelection('Project Type')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompProjectType.results | async " [value]="option.ID">
+                        {{ option.Title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="row" style="margin-top: 1rem !important;">
+            <div class="col-md-6">
+              <button class="w-100 modalFiltersButton" mdbBtn color="info" size="md"   type="button"
+                (click)="onFilterClick(frame)" mdbWavesEffect>
+                <mdb-icon fas icon="filter" class="mr-1"></mdb-icon> Apply Filter
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button class="w-100 modalFiltersButton" mdbBtn color="info" size="md" type="button"
+                (click)="onFilterClear(frame)" mdbWavesEffect outline="true">
+                <mdb-icon fas icon="minus" class="mr-1"></mdb-icon> Clear Filter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row py-3">
+  <!--Grid column-->
+  <div class="col-lg-12 col-md-12">
+    <!--Card-->
+    <mdb-card cascade="true" [hidden]="ListView" narrower="true">
+      <!--Card image-->
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+        <h4 class="h4-responsive">{{headingName}} Dashboard</h4>
+      </div>
+      <!--/Card image-->
+      <!--Card content-->
+      <mdb-card-body cascade="true">
+        <div class="col-md-12 col-sm-12 col-xs-12 IsBigScreen justify-content-center" [hidden]="selectedChipViewName != 'L'">
+          <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+            [pageIndex]="paginator.pageIndex" [length]="paginator.length" [pageSizeOptions]="paginator.pageSizeOptions"
+            showFirstLastButtons></mat-paginator>
+          <br>
+        </div>
+        <div class="=row">
+          <div class="mat-elevation-z8 table-responsive difftab">
+            <mat-table [dataSource]="listData" matSort>
+              <ng-container matColumnDef="Title">
+                <mat-header-cell *matHeaderCellDef>Deal</mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Title">
+                  <a style="text-decoration: underline" (click)="onEdit(element)"
+                    [ngClass]="{ 'highlight': element.isGroup == true }">
+                    {{element.Title}}
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Market">
+                <mat-header-cell [hidden]="selectedChipStatusName == 'Market'" *matHeaderCellDef>Market</mat-header-cell>
+                <mat-cell [hidden]="selectedChipStatusName == 'Market'" *matCellDef="let element" data-label="Market">
+                  {{element.Market}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="SubMarket">
+                <mat-header-cell *matHeaderCellDef>Sub Market</mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="SubMarket">{{element.SubMarket}}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Status">
+                <mat-header-cell *matHeaderCellDef [hidden]="selectedChipStatusName == 'Status'">Status</mat-header-cell>
+                <mat-cell [hidden]="selectedChipStatusName == 'Status'" *matCellDef="let element" data-label="Status">
+                  {{element.Status}}</mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="ProjectType">
+                <mat-header-cell [hidden]="selectedChipStatusName == 'ProjectType'" *matHeaderCellDef>Project Type</mat-header-cell>
+                <mat-cell [hidden]="selectedChipStatusName == 'ProjectType'" *matCellDef="let element" data-label="ProjectType">{{element.ProjectType}}</mat-cell>
+              </ng-container>  -->
+              <ng-container matColumnDef="KeyDate">
+                <mat-header-cell *matHeaderCellDef>Key Date</mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="KeyDate">{{element.KeyDate}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="Funds">
+                <mat-header-cell *matHeaderCellDef>Funds</mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Funds">{{element.Funds}}</mat-cell>
+              </ng-container>
+
+              <!-- <ng-container matColumnDef="ProjectType">
+                <mat-header-cell [hidden]="selectedChipStatusName == 'ProjectType'" *matHeaderCellDef>Project Type</mat-header-cell>
+                <mat-cell [hidden]="selectedChipStatusName == 'ProjectType'" *matCellDef="let element" data-label="ProjectType">{{element.ProjectType}}</mat-cell>
+              </ng-container>  -->
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+              <!-- <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':listData!=null}" ></mat-footer-row>
+                      <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(listData!=null && listData.data.length==0)}" ></mat-footer-row> -->
+              <!-- <mat-footer-row *matFooterRowDef="['noSearchMatch']" [ngClass]="{'hide':!(listData!=null && listData.filteredData.length==0)}" ></mat-footer-row> -->
+            </mat-table>
+            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="pageSize" showFirstLastButtons></mat-paginator> -->
+          </div>
+          <h6 class="text-center pt-4" [ngClass]="{'hide':listData!=null}">
+            Loading...
+            <div class="spinner-grow ml-2" role="status">
+              <span class="sr-only float-right">Loading...</span>
+            </div>
+          </h6>
+          <h6 class="text-center pt-4" [ngClass]="{'hide':!(listData!=null && listData.data.length==0)}">
+            No Data
+          </h6>
+        </div>
+      </mdb-card-body>
+      <!--/.Card content-->
+    </mdb-card>
+    <mdb-card cascade="true" [hidden]="CalendarViewChip" narrower="true">
+
+     <app-my-calendar [selectedStatus]="selectedStatusForCalendar" [ModuleOptions]="ModuleOptions" [pdfEnable]="pdfEnable" [filterCalendarString]="filterCalendarString"></app-my-calendar>
+    </mdb-card>
+    <mdb-card cascade="true" [hidden]="GraphView" narrower="true"> 
+      <div
+      class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+      <h4 class="h4-responsive">Location</h4>
+    </div>
+      <mdb-card-body cascade="true">
+        <mdb-card-text>
+          <agm-map #gm [zoom]="4" [latitude]="latitude" [longitude]="longitude" style="height: 700px">
+            <agm-marker 
+              (mouseOver)="onMouseHover(infoWindow,gm,marker)" 
+              *ngFor="let marker of markers"
+              [latitude]="marker.Latitude"
+              [iconUrl]="{ url: 'assets/red.png' , scaledSize: { width: 45, height: 45}, labelOrigin:{x:12,y:27}}"
+              [longitude]="marker.Longitude">
+              <agm-info-window [disableAutoPan]="false" #infoWindow id="infoWindow">
+                <mdb-card>
+                  <mdb-card-body>
+                    <mdb-card-title>
+                      <p style="color: #3662b6;font-size:19px;font-weight: 800;"> <a
+                          (click)="onEdit(marker)">{{marker.Title}} </a></p>
+                    </mdb-card-title>
+                    <mdb-card-text>
+                      <p class="noMargin" style="width: inherit; white-space: nowrap; text-overflow: ellipsis;"> {{ marker.Address }} </p>
+                      <div class="d-flex flex-column">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" style="padding: 0.75rem 0.5rem;">
+                            Status
+                            <span style="margin-left: 110px;float: right;color:#e6a440">{{ marker.Status}}</span>
+                          </li>
+                          <li class="list-group-item" style="padding: 0.75rem 0.5rem;">
+                            Market
+                            <span style="margin-left: 110px;float: right;">{{ marker.Market}}</span>
+                          </li>
+                          <li class="list-group-item" style="padding: 0.75rem 0.5rem;">
+                            Funds
+                            <span style="margin-left: 110px;float: right;">{{ marker.Funds}}</span>
+                          </li>
+
+                        </ul>
+                      </div>
+                    </mdb-card-text>
+                  </mdb-card-body>
+                </mdb-card>
+              </agm-info-window>
+            </agm-marker>
+          </agm-map> 
+        </mdb-card-text>
+      </mdb-card-body>
+    </mdb-card>
+    <!--/.Card-->
+  </div>
+  <!--Grid column-->
+</div>
+<!-- [iconUrl]="{ url: marker.Color , scaledSize: { width: 45, height: 45}, labelOrigin:{x:12,y:27}}" -->

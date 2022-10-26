@@ -1,0 +1,16 @@
+{
+    "termSet": {
+        "TaxonomyCollectionID": "e94d741650924715b42ba8465111ab2c",
+        "SettlementFormGroupsTermSets": "566e717b-3f72-472e-8455-de372f28db85",
+        "SettlementCategoryMasterTermSets": "1e7f74d4-2ffa-4493-8454-6cf2513cf11b",
+        "SettlementReportGroupsTermSets": "c84046d4-d41c-4e65-939b-a036b6659c17",
+        "SettlementReportExpenseGroupsTermSets": "f3c14b99-0448-47b1-98b2-fb6a4be92a72"
+    },
+    "api": "/sites/DMSDemo2/deal-tracker/",
+    "spSite": "/sites/DMSDemo2/deal-tracker/",
+    "departmentIndex": 5,
+	"tokenID":"sptoken",
+	"baseUrl":"http://localhost:8100"
+
+}
+

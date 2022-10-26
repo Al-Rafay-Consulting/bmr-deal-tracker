@@ -1,0 +1,676 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop">
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a class="stickyButtons elem" (click)="onBack()">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="home" class="mr-1"></mdb-icon>Home
+      </button>
+    </a>
+    <a class="stickyButtons elem" (click)="onDashboard()">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="list" class="mr-1"></mdb-icon>List
+      </button>
+    </a>
+    <a class="stickyButtons elem" (click)="reload()">
+      <button mdbBtn type="button" class="btn-sm">
+        <mdb-icon fas icon="redo-alt" class="mr-1"></mdb-icon>Reload
+      </button>
+    </a>
+    <a class="stickyButtons elem">
+      <button (click)="onSubmit(DealMaster)" mdbBtn type="button" class="btn-sm" *ngIf="DealMaster.invalid == false">
+        <mdb-icon fas icon="save" class="mr-1"></mdb-icon>Submit
+      </button>
+    </a>
+    <!-- <div>
+        <div [hidden]="parent == ''" class="btn-group" role="group" aria-label="Basic example">
+          <a (click)="onBack()" mdbBtn    
+             gradient="aqua" size="sm" data-toggle="modal" data-target="#basicExample"  mdbWavesEffect>
+            <mdb-icon fas icon="angle-left" class="mr-1"></mdb-icon> Back
+          </a>
+        </div>
+      </div>
+     -->
+  </div>
+</div>
+<div class="row py-4">
+  <!--Grid column-->
+  <div class="col-lg-12 col-md-12">
+    <!--Card-->
+    <mdb-card cascade="true" narrower="true">
+      <!--Card image-->
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+        <h4 class="h4-responsive">New Deal</h4>
+      </div>
+      <div class="row card-text">
+        <div class="col-sm-12">
+          <div class="row AuditFields">
+            <div class="col-md-12">
+              {{ AuditDetails }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <form #DealMaster="ngForm" autocomplete="off" (ngSubmit)="onSubmit(DealMaster)">
+        <mdb-card-body cascade="true">
+          <fieldset [disabled]="isView">
+            <!-- Property Information -->
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-12">
+                <h5 class="h4-responsive">Main Info</h5>
+              </div>
+              <div class="col-sm-8">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Deal:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Title" required name="Title"
+                    #Title="ngModel" [(ngModel)]="formData.Title">
+                  <mat-error>This field is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <div class="md-form" [hidden]="true">
+                  <input name="ID" #ID="ngModel" [(ngModel)]="formData.ID" type="text" class="form-control" mdbInput />
+                  <label for="">ID</label>
+                </div>
+                <mat-form-field style="    width: 100%;">
+                  <input [(ngModel)]="formData.DateEntered" type="date" required matInput placeholder="Date Entered"
+                    name="DateEntered">
+
+
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-8">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Address:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Address1" name="Address" #Address="ngModel"
+                    [(ngModel)]="formData.Address" ngx-google-places-autocomplete [options]='Placeoptions'
+                    #placesRef="ngx-places" (ngModelChange)="onEmptyAddress()"
+                    (onAddressChange)="handleAddressChange($event)">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>City:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="City" name="City" #City="ngModel"
+                    [(ngModel)]="formData.City">
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>State</mat-label>
+                  <mat-select id="StateID" class="MatInputBoxShadow" type="text" name="StateId" #StateId="ngModel"
+                    [(ngModel)]="formData.StateId" (ngModelChange)="AutoCompState.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompState.results | async" [value]="option.ID">
+                      {{ option.Title }} - {{option.Name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Zip Code:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="ZipCode" name="ZipCode" #ZipCode="ngModel"
+                    [(ngModel)]="formData.ZipCode">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Longitude:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Longitude" name="Longitude"
+                    #Longitude="ngModel" [(ngModel)]="formData.Longitude">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Latitude:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Latitude" name="Latitude"
+                    #Latitude="ngModel" [(ngModel)]="formData.Latitude">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Market</mat-label>
+                  <mat-select required id="MarketId" class="MatInputBoxShadow" type="text" name="MarketId"
+                    #MarketId="ngModel" [(ngModel)]="formData.MarketId" (selectionChange)="selectionMarket($event)"
+                    (ngModelChange)="AutoCompMarket.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompMarket.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Submarket</mat-label>
+                  <mat-select id="SubMarketId" class="MatInputBoxShadow" type="text" name="SubMarketId"
+                    #SubMarketId="ngModel" [(ngModel)]="formData.SubMarketId"
+                    (ngModelChange)="AutoCompSubMarket.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompSubMarket.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+
+
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Responsible Party</mat-label>
+                  <mat-select #ResponsibleParty [multiple]="true" id="ResponsiblePartyId" class="MatInputBoxShadow"
+                    type="text" name="ResponsiblePartyId" #FundsId="ngModel" [(ngModel)]="selectedResponsibleParty"
+                    (ngModelChange)="AutoCompResponsibleParty.searchResult.next($event)">
+                    <mat-option (click)="toggleAllSelection('ResponsibleParty')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompResponsibleParty.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>BMR Deal Team</mat-label>
+                  <mat-select #BMRDealTeam [multiple]="true" id="BMRDealTeamId" class="MatInputBoxShadow" type="text"
+                    name="BMRDealTeamId" #BMRDealTeamId="ngModel" [(ngModel)]="selectedBMRDealTeam"
+                    (ngModelChange)="AutoBMRDealTeam.searchResult.next($event)">
+                    <mat-option [value]="0" (click)="toggleAllSelection('BMR Deal Team')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoBMRDealTeam.results | async" [value]="option.Id">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Project Type</mat-label>
+                  <mat-select id="ProjectTypeId" class="MatInputBoxShadow" type="text" name="ProjectTypeId"
+                    #ProjectTypeId="ngModel" [(ngModel)]="formData.ProjectTypeId"
+                    (ngModelChange)="AutoCompProjectType.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompProjectType.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-8">
+                <!-- <mat-form-field class="example-full-width">
+                  <mat-label>Description:</mat-label>
+                  <input required matInput class="MatInputBoxShadow" type="text" id="Description" name="Description"
+                    #Description #Description="ngModel" [(ngModel)]="formData.Description" maxlength="255">
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field> -->
+                <mat-form-field class="example-full-width">
+                  <mat-label>Description:</mat-label>
+                  <textarea  required matInput class="MatInputBoxShadow" type="text" id="Description" name="Description"
+                  #Description #Description="ngModel" [(ngModel)]="formData.Description" maxlength="255" rows="3"> </textarea>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+                <span style="color:red; font-style: Italic !important; font-size: 12px; " *ngIf="Description.value.length ==255">You have exceeded
+                  the character limit. Please shorten the description before submitting the deal</span>
+                <p style="text-align: right;">{{Description.value.length}}/255</p>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="alignment">
+                  <mdb-checkbox style="margin-top: 22px;" name="ReportOutput" #ReportOutput="ngModel"
+                    [(ngModel)]="formData.ReportOutput">
+                    Report Output
+                  </mdb-checkbox>
+                </div>
+              </div>
+
+            </div>
+          </fieldset>
+        </mdb-card-body>
+        <mdb-card-body cascade="true">
+          <fieldset [disabled]="isView">
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-12">
+                <h5 class="h4-responsive">Investment Summary</h5>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Funds</mat-label>
+                  <mat-select [multiple]="true" required id="FundsId" class="MatInputBoxShadow" type="text"
+                    name="FundsId" #FundsId="ngModel" [(ngModel)]="selectedFunds"
+                    (ngModelChange)="AutoCompFunds.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompFunds.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field style="    width: 100%;">
+                  <input [(ngModel)]="objInvestmentSummary.AnalysisStartDate" type="date" required matInput
+                    placeholder="Analysis Start Date" name="AnalysisStartDate">
+
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field style="    width: 100%;">
+                  <input [(ngModel)]="objInvestmentSummary.EstCompletionDate" matInput type="date"
+                    placeholder="Est. Completion Date" name="EstCompletionDate">
+
+
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>In-Place RSF:</mat-label>
+                  <input #InPlaceRSF="ngModel" [(ngModel)]="objInvestmentSummary.InPlaceRSF" required matInput
+                    class="MatInputBoxShadow" type="text" appMatInputCurrency id="InPlaceRSF" name="InPlaceRSF"
+                    (change)="calPurchasePrice('InPlaceRSF')">
+
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Purchase Price:</mat-label>
+                  <input [disabled]="objInvestmentSummary.InPlaceRSF == null"
+                    (change)="calPurchasePrice('PurchasePrice')" appMatInputCurrency matInput class="MatInputBoxShadow"
+                    name="PurchasePrice" #PurchasePrice="ngModel" [(ngModel)]="objInvestmentSummary.PurchasePrice"
+                    type="text">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Purchase Price PSF:</mat-label>
+                  <input [disabled]="objInvestmentSummary.InPlaceRSF == null"
+                    (change)="calPurchasePrice('PurchasePricePSF')" appMatInputCurrency matInput
+                    class="MatInputBoxShadow" name="PurchasePricePSF" #PurchasePricePSF="ngModel"
+                    [(ngModel)]="objInvestmentSummary.PurchasePricePSF" type="text">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Stabilized RSF:</mat-label>
+                  <input #StabilizedRSF="ngModel" [(ngModel)]="objInvestmentSummary.StabilizedRSF" matInput
+                    class="MatInputBoxShadow" type="text" appMatInputCurrency id="StabilizedRSF" name="StabilizedRSF"
+                    (change)="calStabilized('StabilizedRSF')">
+
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Stabilized Basis:</mat-label>
+                  <input [disabled]="objInvestmentSummary.StabilizedRSF == null" #StabilizedBasis="ngModel"
+                    [(ngModel)]="objInvestmentSummary.StabilizedBasis" (change)="calStabilized('StabilizedBasis')"
+                    matInput class="MatInputBoxShadow" type="text" appMatInputCurrency id="StabilizedBasis"
+                    name="StabilizedBasis">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Stabilized Basis PSF:</mat-label>
+                  <input (change)="calStabilized('StabilizedBasisPSF')"
+                    [disabled]="objInvestmentSummary.StabilizedRSF == null" #StabilizedBasisPSF="ngModel"
+                    [(ngModel)]="objInvestmentSummary.StabilizedBasisPSF" matInput class="MatInputBoxShadow" type="text"
+                    appMatIn1putCurrency id="StabilizedBasisPSF" name="StabilizedBasisPSF">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Untrended YoC:</mat-label>
+                  <input #UntrendedYoC="ngModel" [(ngModel)]="objInvestmentSummary.UntrendedYoC" matInput
+                    placeholder="xx.xx" class="MatInputBoxShadow" type="text" id="UntrendedYoC" name="UntrendedYoC"
+                    appPercentageDirective>
+                  <span matPrefix style="color:#757575">%&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Lab Market Rent $PSF (Ann.):</mat-label>
+                  <input #LabMarketRentPSFAnn="ngModel" [(ngModel)]="objInvestmentSummary.LabMarketRentPSFAnn"
+                    (change)="calLabMarket()" matInput class="MatInputBoxShadow" type="text" appMatInputCurrency
+                    id="LabMarketRentPSFAnn" name="LabMarketRentPSFAnn">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field [disabled]="true" class="example-full-width">
+                  <mat-label>Lab Market Rent $PSF (Mo.):</mat-label>
+                  <input (change)="calLabMarketMon()" #LabMarketRentPSFMon="ngModel"
+                    [(ngModel)]="objInvestmentSummary.LabMarketRentPSFMon" matInput class="MatInputBoxShadow"
+                    type="text" appMatInputCurrency id="LabMarketRentPSFMon" name="LabMarketRentPSFMon">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Hard Costs $PSF:</mat-label>
+                  <input #HardCostsPSF="ngModel" [(ngModel)]="objInvestmentSummary.HardCostsPSF" matInput
+                    class="MatInputBoxShadow" type="text" appMatInputCurrency id="HardCostsPSF" name="HardCostsPSF">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Tenant Improvements $PSF:</mat-label>
+                  <input #TenantImprovementsPSF="ngModel" [(ngModel)]="objInvestmentSummary.TenantImprovementsPSF"
+                    matInput class="MatInputBoxShadow" type="text" appMatInputCurrency id="TenantImprovementsPSF"
+                    name="TenantImprovementsPSF">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Conversion Cost $PSF:</mat-label>
+                  <input #ConversionCostPSF="ngModel" [(ngModel)]="objInvestmentSummary.ConversionCostPSF" matInput
+                    class="MatInputBoxShadow" type="text" appMatInputCurrency id="ConversionCostPSF"
+                    name="ConversionCostPSF">
+                  <span matPrefix style="color:#757575">$&nbsp;</span>
+                </mat-form-field>
+              </div>
+            </div>
+          </fieldset>
+        </mdb-card-body>
+        <mdb-card-body cascade="true">
+          <fieldset [disabled]="isView">
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-12">
+                <h5 class="h4-responsive">Deal Details</h5>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Status</mat-label>
+                  <mat-select required id="StatusID" class="MatInputBoxShadow" type="text" name="StatusId"
+                    #StatusId="ngModel" [(ngModel)]="formData.StatusId"
+                    (ngModelChange)="AutoCompStatus.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompStatus.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <!-- <mat-form-field class="example-full-width">
+                  <mat-label>Categorization</mat-label>
+                  <mat-select required class="MatInputBoxShadow" type="text" name="Categorization"
+                    [(ngModel)]="formData.Categorization">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let item of Categorization" [value]="item">
+                      {{item}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field> -->
+                <mat-form-field class="example-full-width">
+                  <mat-label>Categorization</mat-label>
+                  <mat-select required id="CategorizationId" class="MatInputBoxShadow" type="text" name="CategorizationId"
+                  #CategorizationId="ngModel" [(ngModel)]="formData.CategorizationId" 
+                    (ngModelChange)="AutoCompCategorization.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompCategorization.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Brokerage</mat-label>
+                  <mat-select [multiple]="true" id="BrokerageId" class="MatInputBoxShadow" type="text"
+                    name="BrokerageId" #Brokerage #BrokerageId="ngModel" [(ngModel)]="selectedBrokerage"
+                    (ngModelChange)="AutoCompBrokerage.searchResult.next($event)">
+                    <mat-option (click)="toggleAllSelection('Brokerage')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompBrokerage.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Broker(s)</mat-label>
+                  <mat-select [multiple]="true" id="BrokersId" class="MatInputBoxShadow" type="text" name="BrokersId"
+                    #Brokers #BrokersId="ngModel" [(ngModel)]="selectedBrokers"
+                    (ngModelChange)="AutoCompBroker.searchResult.next($event)">
+                    <mat-option (click)="toggleAllSelection('Brokers')">-- Select All --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompBroker.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!-- <div class="col-sm-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Deal Comments:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Title" name="Title" #Title="ngModel"
+                    [(ngModel)]="objDealCommentsQuestions.Title">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>BMR Notes:</mat-label>
+                  <input matInput class="MatInputBoxShadow" type="text" id="Title" name="Title" #Title="ngModel"
+                    [(ngModel)]="objBMRNotesQuestions.Title">
+                </mat-form-field>
+              </div> -->
+              <br>
+            </div>
+            <div class="row" style="padding: 8px 1%">
+              <div class="col-sm-8">
+                <table mdbTable class="z-depth-1">
+                  <thead>
+                    <tr>
+                      <th [hidden]="true">ID</th>
+                      <th>Key Upcoming Date(s)</th>
+                      <th>Description </th>
+                      <th>Event </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let field of KeyUpcomingrepeating; let i = index;">
+                      <td [hidden]="true"></td>
+                      <td data-label="Key Upcoming Date(s)">
+                        <input id="UpcomingDate" [ngModelOptions]="{standalone: true}" [(ngModel)]="field.UpcomingDate"
+                          type="date" class="form-control" />
+                      </td>
+                      <td data-label="Description ">
+                        <mat-form-field appearance="outline" class="matTableFields">
+                          <input style="box-shadow: none;" matInput type="text" id="Description"
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="field.Description">
+                        </mat-form-field>
+                      </td>
+
+                      <td>
+                        <mat-form-field appearance="outline" class="matTableFields">
+
+                          <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="field.EventListId">
+                            <mat-option *ngFor="let option of EventArray" [value]="option.ID">
+                              {{ option.Title }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <div>
+                          <mat-form-field *ngIf="field.EventListId == 8" appearance="outline"
+                            class="matTableFields alignment">
+
+                            <input style="box-shadow: none;" matInput type="text" [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="field.EventListText">
+
+                          </mat-form-field>
+                        </div>
+
+                      </td>
+                      <td>
+                        <a (click)="DeleteRow(i)" class="matTableButtons" [hidden]="isView"  mdbTooltip="Delete"
+                          *ngIf="i > 0" placement="left" mdbBtn floating="true" size="sm"  gradient="peach"
+                           mdbWavesEffect>
+                          <mdb-icon fas icon="trash-alt"></mdb-icon>
+                        </a>
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td colspan="4">
+                        <div class="col-md-12">
+                          <a (click)="AddKeyUpcomingRow()"
+                            *ngIf="common.CheckIfUserhasAccess_Action('Deposit Schedule','Add')" class="matTableButtons"
+                            [hidden]="isView" mdbBtn floating="true" mdbTooltip="Add Row" placement="right"   size="sm"
+                             gradient="aqua"  mdbWavesEffect>
+                            <mdb-icon fas icon="plus"></mdb-icon>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-sm-4">
+                <table mdbTable class="z-depth-1">
+                  <thead>
+                    <tr>
+                      <th>Seller Name</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let field of Sellerrepeating; let i = index;">
+                      <td data-label="Seller Name">
+                        <mat-form-field appearance="outline" class="matTableFields">
+                          <input style="box-shadow: none; color: black;" matInput type="text" id="Title"
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="field.Title">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <a (click)="DeleteRowSeller(i)" class="matTableButtons" [hidden]="isView"  mdbTooltip="Delete"
+                          *ngIf="i > 0" placement="left" mdbBtn floating="true" size="sm"  gradient="peach"
+                           mdbWavesEffect>
+                          <mdb-icon fas icon="trash-alt"></mdb-icon>
+                        </a>
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td colspan="3">
+                        <div class="col-md-12">
+                          <a *ngIf="common.CheckIfUserhasAccess_Action('Deposit Schedule','Add')"
+                            (click)="AddSellerRow()" class="matTableButtons" [hidden]="isView" mdbBtn floating="true"
+                            mdbTooltip="Add Row" placement="right"   size="sm"  gradient="aqua"  mdbWavesEffect>
+                            <mdb-icon fas icon="plus"></mdb-icon>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </fieldset>
+        </mdb-card-body>
+        <mdb-card-body cascade="true">
+          <fieldset [disabled]="isView">
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-12">
+                <h5 class="h4-responsive">Quick Links</h5>
+              </div>
+              <div class="col-sm-12">
+                <table mdbTable class="z-depth-1">
+                  <thead>
+                    <tr>
+                      <th>Order</th>
+                      <th>Title</th>
+                      <th>URL</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let field of QuickLinks; let i = index;">
+                      <td data-label="Order">
+                        <mat-form-field appearance="outline" class="matTableFields">
+                          <input style="box-shadow: none;color: black;" matInput type="number" id="Title"
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="field.OrderBy">
+                        </mat-form-field>
+                      </td>
+                      <td data-label="Title">
+                        <mat-form-field appearance="outline" class="matTableFields">
+                          <input style="box-shadow: none;color: black;" matInput type="text" id="Title"
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="field.Title">
+                        </mat-form-field>
+                      </td>
+                      <td data-label="URL">
+                        <mat-form-field appearance="outline" class="matTableFields">
+                          <input id="DocLink" style="box-shadow: none;" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="field.DocLink" matInput type="text">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <a (click)="DeleteRowQuickLinks(i)" class="matTableButtons" [hidden]="isView"
+                           mdbTooltip="Delete" placement="left" mdbBtn floating="true" size="sm"  gradient="peach"
+                          *ngIf="i > 0"  mdbWavesEffect>
+                          <mdb-icon fas icon="trash-alt"></mdb-icon>
+                        </a>
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td colspan="3">
+                        <div class="col-md-12">
+                          <a (click)="AddQuickLinksRow()"
+                            *ngIf="common.CheckIfUserhasAccess_Action('Deposit Schedule','Add')" class="matTableButtons"
+                            [hidden]="isView" mdbBtn floating="true" mdbTooltip="Add Row" placement="right"   size="sm"
+                             gradient="aqua"  mdbWavesEffect>
+                            <mdb-icon fas icon="plus"></mdb-icon>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </fieldset>
+        </mdb-card-body>
+        <button (click)="onSubmit(DealMaster)" [disabled]="DealMaster.invalid" type="button" mdbBtn color="default"
+          class="waves-light" mdbWavesEffect>
+          <mdb-icon fas icon="save" class="mr-1"></mdb-icon>Submit
+        </button>
+
+      </form>
+    </mdb-card>
+  </div>
+</div>
+
+<!-- <script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvPLtJtc9s89H4afNkK3E_dTFEVMyK2PY&libraries=places&callback=initAutoComplete">
+</script> -->

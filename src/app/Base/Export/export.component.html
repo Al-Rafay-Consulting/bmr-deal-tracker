@@ -1,0 +1,11 @@
+<!-- <button class="btn btn-default waves-light" (click)="generateExcel()" mdbWavesEffect>Export <i class="fas fa-file-excel"></i></button> -->
+
+<div class="Export">
+    <div class="btn-group" role="group" aria-label="Basic example">            
+        <a [hidden]="exportData.length == 0" class="stickyButtons" (click)="generateExcel()">
+            <button mdbBtn type="button" class="btn-sm">
+                <mdb-icon fas icon="file-excel" class="mr-1"></mdb-icon> Excel
+            </button>
+        </a>  
+    </div>
+</div>

@@ -1,0 +1,58 @@
+.bottomSheetHeight {
+  height: calc(100vh - 50px) !important;
+  width: calc(100vw - 20px);
+}
+
+.mat-bottom-sheet-container {
+  padding: 14px 18px !important;
+}
+
+
+.createdBy-area {
+  display: inline-flex;
+  color: #6c859c;
+}
+
+.reply-header {
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 100%;
+  border: solid 1px #6c859c;
+  padding: 8px;
+  border-radius: 4px 0px;
+  //background-color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.reply-detail {
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 100%;
+  border: solid 1px #ddd;
+  padding: 8px;
+  border-radius: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.picArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: solid 1px #ccc;
+  color: #6c859c;
+  justify-content: center;
+}
+
+.matIconButtonsCustom-this {
+  background-color: #efefef;
+}
+
+.w-98 {
+  width: 98%;
+}
+.fontfamily{
+  font-family: 'Century Gothic' !important ;
+}

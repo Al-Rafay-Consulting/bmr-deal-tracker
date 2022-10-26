@@ -1,0 +1,455 @@
+
+h3 {
+    margin: 0 0 10px;
+  }
+  
+  pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+  }
+
+  .cal-tooltip{
+    opacity: unset;
+  }
+  
+  .example-month-picker .mat-calendar-period-button {
+    pointer-events: none;
+  }
+  
+  .example-month-picker .mat-calendar-arrow {
+    display: none;
+  }
+
+  .cal-cell:focus{
+    outline:none !important;
+  }
+ 
+  .cal-day-number{
+    opacity: 0.9 !important;
+  }
+
+  .cal-week-view .cal-day-headers span {
+    font-weight: 400 !important;
+    opacity: 0.9 !important;
+}
+
+  mwl-calendar-week-view > .cal-week-view > mwl-calendar-week-view-header > .cal-day-headers > .cal-header {
+    font-weight: 400 !important;
+    opacity: 0.9 !important;
+  }
+
+  .example-table-container {
+    //position: relative;
+    // max-height: 400px;
+    // overflow:  ;
+  }
+
+  
+
+  
+
+  @media only screen and (max-width: 768px) { 
+
+    .CalendarNavButtons{
+      padding-left: .75rem;
+      padding-right: .75rem;
+    }  
+
+    .MonthHeading{
+    font-size: 2rem;
+    }
+
+    .IsMobile{
+      display: none;
+    }  
+  }
+
+  @media only screen and (min-width: 768px) { 
+
+  
+    .IsDesktopMobile{
+      display: none;
+    }  
+
+  }
+
+
+  @media only screen and (min-width: 1024px) { 
+  
+    .IsSmall{
+      display: none;
+    }  
+
+  }
+
+  @media only screen and (max-width: 1025px) { 
+  
+    .IsBig{
+      display: none;
+    }  
+
+  }
+
+  
+
+  
+
+  @media only screen and (max-width: 1120px) { 
+
+    .calendar_buttonRow{
+      flex: 0 0 100%;
+      max-width: 100%;
+    }    
+
+    .CalendarActionButton{
+      width:100% !important;
+      }
+  }
+
+
+
+.chipArea{  
+  float: left;
+  margin: 0 8px 0 -12px;
+  height: 32px; 
+  width: 32px; 
+  border-radius: 50%;
+}
+
+.selectedChip{
+  color: white !important; 
+  background-color: #40a9e6 !important;
+}
+
+.EventToolTip{
+  color:black !important;
+  text-align:left !important;
+  font-size:16px; 
+  max-width: none; 
+  width:350px !important; 
+  //border:solid; 
+  //border-width: 1px; 
+  //border-color: #d0d0d0; 
+ // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+
+ 
+}
+
+.cal-month-view .cal-cell-top {
+  min-height: 69px !important; 
+
+}
+
+@media screen {
+
+    
+        .TableToolTipCalendar .table {
+          border: 0;
+          vertical-align: middle;
+        }
+
+        .TableToolTipCalendar .table caption {
+          font-size: 1em;
+        }
+
+        .TableToolTipCalendar thead{
+          display: none;
+        }
+
+        .TableToolTipCalendar  .table tr {
+          //border-bottom: 5px solid #ddd;
+          display: block;
+        }
+
+        .TableToolTipCalendar  .table td { 
+          display: block;
+          font-size: 13px;
+          //font-family: calibri;
+          text-align: left;
+          height: 100%;
+          padding-left: 10px;
+          
+          padding-right: 10px;
+          //border-top: none !important;
+         // border-color: gray;
+        }
+      
+        #TableToolTipCalendar [name=EventTable]{
+          display: flex;
+          flex-direction: column-reverse;
+        }
+
+        .TableToolTipCalendar td{
+            min-height: 20px;
+        }
+
+        .TableToolTipCalendar tfoot td{
+            min-height: 20px;
+        }
+
+        .TableToolTipCalendar .table td:before {
+
+           content: attr(data-label);
+           float: left;
+           text-transform:capitalize;
+           font-weight: normal;
+           color: #05a2c6 !important;
+           font-size: 13px;
+           padding-right: 5px;
+           width: 110px;
+           min-height: 20px;
+           height: auto;
+          
+        }
+
+        .TableToolTipCalendar  .table td:last-child {
+          border-bottom: 0;
+        }
+
+        
+
+        .TableToolTipCalendar td:first-of-type, thead:first-of-type, tfoot:first-of-type {  
+          margin-bottom: 0px;
+        }
+
+        
+
+      //   .TableToolTipCalendar td{
+      //     min-height: 20px;
+      // }
+}
+
+.CalendarEventTile{        
+  font-size: 80%;        
+  font-weight: 500;
+  padding:2px;        
+  border-bottom: solid 1px #d0d0d0;        
+  word-wrap:break-word;
+  word-break: break-word; 
+}
+@media screen and (max-width: 960px) {
+  .difftab .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .difftab .mat-table caption {
+    font-size: 1em;
+  }
+
+
+.difftab .mat-header-row{
+      display: none;
+  }
+.difftab  .mat-table .mat-row {
+    border-bottom: 5px solid #ddd;
+    display: block;
+  }
+  /*
+  .mat-table .mat-row:nth-child(even) {background: #CCC}
+  .mat-table .mat-row:nth-child(odd) {background: #FFF}
+  */
+  .difftab  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 12px;
+    text-align: right;
+  //   font-weight: bold;
+    //height: 20px;
+    height: auto;;
+    margin-bottom: 2%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .difftab .mat-cell{
+      min-height: 30px;        
+      max-width: 100%;    
+  }
+  
+  .difftab  .mat-footer-cell{
+      min-height: 30px;
+  }
+  .difftab .mat-table .mat-cell:before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    text-transform:capitalize;
+    font-weight: normal;
+    color: #05a2c6 !important;
+    font-size: 12px;
+  }
+  .difftab  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
+  .difftab .mat-table .mat-cell:first-child {
+    margin-top: 2%;
+    min-height: 50px;
+  }
+
+  .difftab mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+  padding-left: 10px !important; 
+  }
+
+  /*
+  .CalendarEventTile{            
+      text-align: left;
+      margin: 0.5px 2px;
+      font-size: 80%;
+      color: black;
+      font-weight: 700;
+      padding: 2px;
+      border: solid;
+      border-width: thin;
+      border-color: #abacb3;            
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis; word-break: break-all; word-wrap: break-word;
+  }   
+  */
+
+  .CalendarEventTile{            
+      text-align: left;
+      padding:5px;        
+      border-bottom: solid 1px #d0d0d0;                                                   
+      overflow: hidden; white-space: unset; text-overflow: ellipsis; word-break: break-word; word-wrap: break-word;
+  }   
+  
+  
+
+  .cal-month-view .cal-cell{
+      width:100% !important;
+      display: grid !important;
+      table-layout: fixed !important;
+  }
+
+  // .cal-month-view .cal-day-cell {
+  //     min-height: 250px;
+  // }
+}
+
+@media screen and (max-width: 960px) {
+  .difftab .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .difftab .mat-table caption {
+    font-size: 1em;
+  }
+
+
+.difftab .mat-header-row{
+      display: none;
+  }
+.difftab  .mat-table .mat-row {
+    border-bottom: 5px solid #ddd;
+    display: block;
+  }
+  /*
+  .mat-table .mat-row:nth-child(even) {background: #CCC}
+  .mat-table .mat-row:nth-child(odd) {background: #FFF}
+  */
+  .difftab  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 12px;
+    text-align: right;
+  //   font-weight: bold;
+    //height: 20px;
+    height: auto;;
+    margin-bottom: 2%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .difftab .mat-cell{
+      min-height: 30px;        
+      max-width: 100%;    
+  }
+  
+  .difftab  .mat-footer-cell{
+      min-height: 30px;
+  }
+  .difftab .mat-table .mat-cell:before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    text-transform:capitalize;
+    font-weight: normal;
+    color: #05a2c6 !important;
+    font-size: 12px;
+  }
+  .difftab  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
+  .difftab .mat-table .mat-cell:first-child {
+    margin-top: 2%;
+    min-height: 50px;
+  }
+
+  .difftab mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type {
+  padding-left: 10px !important; 
+  }
+
+  /*
+  .CalendarEventTile{            
+      text-align: left;
+      margin: 0.5px 2px;
+      font-size: 80%;
+      color: black;
+      font-weight: 700;
+      padding: 2px;
+      border: solid;
+      border-width: thin;
+      border-color: #abacb3;            
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis; word-break: break-all; word-wrap: break-word;
+  }   
+  */
+
+  .CalendarEventTile{            
+      text-align: left;
+      padding:5px;        
+      border-bottom: solid 1px #d0d0d0;                                                   
+      overflow: hidden; white-space: unset; text-overflow: ellipsis; word-break: break-word; word-wrap: break-word;
+  }   
+  
+  
+
+  .cal-month-view .cal-cell{
+      width:100% !important;
+      display: grid !important;
+      table-layout: fixed !important;
+  }
+
+  // .cal-month-view .cal-day-cell {
+  //     min-height: 250px;
+  // }
+}
+@media screen and (max-width: 960px) {
+
+
+  .CalendarEventTile{            
+      text-align: left;
+      padding:5px;        
+      border-bottom: solid 1px #d0d0d0;                                                   
+      overflow: hidden; white-space: unset; text-overflow: ellipsis; word-break: break-word; word-wrap: break-word;
+  }   
+  
+
+}
+@media only screen and (max-width: 768px) { 
+
+  .CalendarEventTile{
+      font-weight: 400;    
+      font-size: 48%;
+  }
+
+}
+.mat-tab-body-content{
+  overflow: hidden !important;
+}

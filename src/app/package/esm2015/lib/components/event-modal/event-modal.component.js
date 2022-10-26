@@ -1,0 +1,62 @@
+import { __decorate, __metadata } from "tslib";
+import { Component } from '@angular/core';
+import { MDBModalRef } from 'angular-bootstrap-md';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { parse } from 'date-fns';
+let EventModalComponent = class EventModalComponent {
+    constructor(modalRef) {
+        this.modalRef = modalRef;
+        this.eventData = new Subject();
+        this.eventDeleted = new Subject();
+    }
+    getParsedValues(eventData) {
+        const id = this.event.id;
+        const name = eventData.name;
+        const startDate = parse(eventData.startDate.replace(', ', 'T'));
+        const endDate = parse(eventData.endDate.replace(', ', 'T'));
+        const color = eventData.color;
+        return { id, name, startDate, endDate, color };
+    }
+    ngOnInit() {
+        if (this.event && this.mode === 'edit') {
+            this.eventForm = new FormGroup({
+                name: new FormControl({ value: this.event.name, disabled: !this.editable }),
+                startDate: new FormControl({ value: this.event.startDate, disabled: !this.editable }),
+                endDate: new FormControl({ value: this.event.endDate, disabled: !this.editable }),
+                color: new FormControl({ value: this.event.color, disabled: !this.editable })
+            });
+        }
+        else {
+            this.eventForm = new FormGroup({
+                name: new FormControl('New event'),
+                startDate: new FormControl(this.event.startDate),
+                endDate: new FormControl(this.event.endDate),
+                color: new FormControl(this.event.color)
+            });
+        }
+    }
+    onSave() {
+        const event = this.getParsedValues(this.eventForm.value);
+        this.eventData.next(event);
+        this.modalRef.hide();
+    }
+    onDelete() {
+        const event = this.getParsedValues(this.eventForm.value);
+        this.eventDeleted.next(event);
+        this.modalRef.hide();
+    }
+};
+EventModalComponent.ctorParameters = () => [
+    { type: MDBModalRef }
+];
+EventModalComponent = __decorate([
+    Component({
+        selector: 'mdb-event-modal',
+        template: "<div class=\"modal-content\">\n  <div class=\"modal-header\">\n    <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"modalRef.hide()\">\n      <span aria-hidden=\"true\">\u00D7</span>\n    </button>\n    <h4 class=\"modal-title w-100\" id=\"myModalLabel\"> {{ title }}</h4>\n  </div>\n  <div class=\"modal-body\">\n    <form [formGroup]=\"eventForm\">\n      <div class=\"md-form\">\n        <input type=\"text\" mdbInput formControlName=\"name\" class=\"form-control w-100\">\n        <label>Name</label>\n      </div>\n      <div class=\"md-form\">\n        <input type=\"text\" mdbInput formControlName=\"startDate\" class=\"form-control w-100\">\n        <label>Start date</label>\n      </div>\n      <div class=\"md-form\">\n        <input type=\"text\" mdbInput formControlName=\"endDate\" class=\"form-control w-100\">\n        <label>End date</label>\n      </div>\n\n      <p>Color</p>\n      <div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" checked value=\"info\" name=\"color\" id=\"info\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"info\" class=\"custom-control-label text-info\">Info</label>\n        </div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" value=\"success\" name=\"color\" id=\"success\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"success\" class=\"custom-control-label text-success\">Success</label>\n        </div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" value=\"warning\" name=\"color\" id=\"warning\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"warning\" class=\"custom-control-label text-warning\">Warning</label>\n        </div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" value=\"danger\" name=\"color\" id=\"danger\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"danger\" class=\"custom-control-label text-danger\">Danger</label>\n        </div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" value=\"primary\" name=\"color\" id=\"primary\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"primary\" class=\"custom-control-label text-primary\">Primary</label>\n        </div>\n        <div class=\"custom-control custom-radio custom-control-inline font-weight-bold\">\n          <input type=\"radio\" value=\"secondary\" name=\"color\" id=\"secondary\" class=\"custom-control-input\" formControlName=\"color\">\n          <label for=\"secondary\" class=\"custom-control-label text-secondary\">Secondary</label>\n        </div>\n      </div>\n    </form>\n  </div>\n  <div *ngIf=\"mode === 'edit' && this.editable\" class=\"modal-footer\">\n    <button type=\"button\" mdbBtn color=\"danger\" class=\"waves-light\" aria-label=\"Close\" (click)=\"onDelete()\" mdbWavesEffect>{{ cancelBtn }}</button>\n    <button type=\"button\" mdbBtn color=\"primary\" class=\"relative waves-light\" mdbWavesEffect (click)=\"onSave()\">{{ actionBtn }}</button>\n  </div>\n  <div *ngIf=\"mode === 'add'\" class=\"modal-footer\">\n    <button type=\"button\" mdbBtn color=\"secondary\" class=\"waves-light\" aria-label=\"Close\" (click)=\"modalRef.hide()\" mdbWavesEffect>{{ cancelBtn }}</button>\n    <button type=\"button\" mdbBtn color=\"primary\" class=\"relative waves-light\" mdbWavesEffect (click)=\"onSave()\">{{ actionBtn }}</button>\n  </div>\n</div>",
+        styles: [""]
+    }),
+    __metadata("design:paramtypes", [MDBModalRef])
+], EventModalComponent);
+export { EventModalComponent };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZXZlbnQtbW9kYWwuY29tcG9uZW50LmpzIiwic291cmNlUm9vdCI6Im5nOi8vbWRiLWNhbGVuZGFyLyIsInNvdXJjZXMiOlsibGliL2NvbXBvbmVudHMvZXZlbnQtbW9kYWwvZXZlbnQtbW9kYWwuY29tcG9uZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxPQUFPLEVBQUUsU0FBUyxFQUFVLE1BQU0sZUFBZSxDQUFDO0FBQ2xELE9BQU8sRUFBRSxXQUFXLEVBQUUsTUFBTSxzQkFBc0IsQ0FBQztBQUNuRCxPQUFPLEVBQUUsU0FBUyxFQUFFLFdBQVcsRUFBRSxNQUFNLGdCQUFnQixDQUFDO0FBRXhELE9BQU8sRUFBRSxPQUFPLEVBQUUsTUFBTSxNQUFNLENBQUM7QUFDL0IsT0FBTyxFQUFFLEtBQUssRUFBRSxNQUFNLFVBQVUsQ0FBQztBQU9qQyxJQUFhLG1CQUFtQixHQUFoQyxNQUFhLG1CQUFtQjtJQVc5QixZQUFtQixRQUFxQjtRQUFyQixhQUFRLEdBQVIsUUFBUSxDQUFhO1FBRXhDLGNBQVMsR0FBMkIsSUFBSSxPQUFPLEVBQUUsQ0FBQztRQUVsRCxpQkFBWSxHQUEyQixJQUFJLE9BQU8sRUFBRSxDQUFDO0lBSlYsQ0FBQztJQU01QyxlQUFlLENBQUMsU0FBYztRQUM1QixNQUFNLEVBQUUsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQztRQUN6QixNQUFNLElBQUksR0FBRyxTQUFTLENBQUMsSUFBSSxDQUFDO1FBQzVCLE1BQU0sU0FBUyxHQUFHLEtBQUssQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLE9BQU8sQ0FBQyxJQUFJLEVBQUUsR0FBRyxDQUFDLENBQUMsQ0FBQztRQUNoRSxNQUFNLE9BQU8sR0FBRyxLQUFLLENBQUMsU0FBUyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFLEdBQUcsQ0FBQyxDQUFDLENBQUM7UUFDNUQsTUFBTSxLQUFLLEdBQUcsU0FBUyxDQUFDLEtBQUssQ0FBQztRQUU5QixPQUFPLEVBQUUsRUFBRSxFQUFFLElBQUksRUFBRSxTQUFTLEVBQUUsT0FBTyxFQUFFLEtBQUssRUFBRSxDQUFDO0lBQ2pELENBQUM7SUFFRCxRQUFRO1FBQ04sSUFBSSxJQUFJLENBQUMsS0FBSyxJQUFJLElBQUksQ0FBQyxJQUFJLEtBQUssTUFBTSxFQUFFO1lBQ3RDLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxTQUFTLENBQUM7Z0JBQzdCLElBQUksRUFBRSxJQUFJLFdBQVcsQ0FBQyxFQUFFLEtBQUssRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksRUFBRSxRQUFRLEVBQUUsQ0FBQyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7Z0JBQzNFLFNBQVMsRUFBRSxJQUFJLFdBQVcsQ0FBQyxFQUFFLEtBQUssRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxRQUFRLEVBQUUsQ0FBQyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7Z0JBQ3JGLE9BQU8sRUFBRSxJQUFJLFdBQVcsQ0FBQyxFQUFFLEtBQUssRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLE9BQU8sRUFBRSxRQUFRLEVBQUUsQ0FBQyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7Z0JBQ2pGLEtBQUssRUFBRSxJQUFJLFdBQVcsQ0FBQyxFQUFFLEtBQUssRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLEtBQUssRUFBRSxRQUFRLEVBQUUsQ0FBQyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7YUFDOUUsQ0FBQyxDQUFDO1NBQ0o7YUFBTTtZQUNMLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxTQUFTLENBQUM7Z0JBQzdCLElBQUksRUFBRSxJQUFJLFdBQVcsQ0FBQyxXQUFXLENBQUM7Z0JBQ2xDLFNBQVMsRUFBRSxJQUFJLFdBQVcsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLFNBQVMsQ0FBQztnQkFDaEQsT0FBTyxFQUFFLElBQUksV0FBVyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDO2dCQUM1QyxLQUFLLEVBQUUsSUFBSSxXQUFXLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUM7YUFDekMsQ0FBQyxDQUFDO1NBQ0o7SUFDSCxDQUFDO0lBRUQsTUFBTTtRQUNKLE1BQU0sS0FBSyxHQUFHLElBQUksQ0FBQyxlQUFlLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztRQUN6RCxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztRQUMzQixJQUFJLENBQUMsUUFBUSxDQUFDLElBQUksRUFBRSxDQUFDO0lBQ3ZCLENBQUM7SUFFRCxRQUFRO1FBQ04sTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLGVBQWUsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ3pELElBQUksQ0FBQyxZQUFZLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQzlCLElBQUksQ0FBQyxRQUFRLENBQUMsSUFBSSxFQUFFLENBQUM7SUFDdkIsQ0FBQztDQUVGLENBQUE7O1lBOUM4QixXQUFXOztBQVg3QixtQkFBbUI7SUFML0IsU0FBUyxDQUFDO1FBQ1QsUUFBUSxFQUFFLGlCQUFpQjtRQUMzQixtdUhBQTJDOztLQUU1QyxDQUFDO3FDQVk2QixXQUFXO0dBWDdCLG1CQUFtQixDQXlEL0I7U0F6RFksbUJBQW1CIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQ29tcG9uZW50LCBPbkluaXQgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IE1EQk1vZGFsUmVmIH0gZnJvbSAnYW5ndWxhci1ib290c3RyYXAtbWQnO1xuaW1wb3J0IHsgRm9ybUdyb3VwLCBGb3JtQ29udHJvbCB9IGZyb20gJ0Bhbmd1bGFyL2Zvcm1zJztcbmltcG9ydCB7IENhbGVuZGFyRXZlbnQgfSBmcm9tICcuLi8uLi9pbnRlcmZhY2VzL2NhbGVuZGFyLWV2ZW50LmludGVyZmFjZSc7XG5pbXBvcnQgeyBTdWJqZWN0IH0gZnJvbSAncnhqcyc7XG5pbXBvcnQgeyBwYXJzZSB9IGZyb20gJ2RhdGUtZm5zJztcblxuQENvbXBvbmVudCh7XG4gIHNlbGVjdG9yOiAnbWRiLWV2ZW50LW1vZGFsJyxcbiAgdGVtcGxhdGVVcmw6ICcuL2V2ZW50LW1vZGFsLmNvbXBvbmVudC5odG1sJyxcbiAgc3R5bGVVcmxzOiBbJy4vZXZlbnQtbW9kYWwuY29tcG9uZW50LnNjc3MnXVxufSlcbmV4cG9ydCBjbGFzcyBFdmVudE1vZGFsQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcbiAgdGl0bGU6IHN0cmluZztcbiAgaGVhZGluZzogc3RyaW5nO1xuICBhY3Rpb25CdG46IHN0cmluZztcbiAgY2FuY2VsQnRuOiBzdHJpbmc7XG4gIG1vZGU6IHN0cmluZztcbiAgZWRpdGFibGU6IGJvb2xlYW47XG4gIGV2ZW50OiBDYWxlbmRhckV2ZW50O1xuXG4gIGV2ZW50Rm9ybTogRm9ybUdyb3VwO1xuXG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBtb2RhbFJlZjogTURCTW9kYWxSZWYpIHt9XG5cbiAgZXZlbnREYXRhOiBTdWJqZWN0PENhbGVuZGFyRXZlbnQ+ID0gbmV3IFN1YmplY3QoKTtcblxuICBldmVudERlbGV0ZWQ6IFN1YmplY3Q8Q2FsZW5kYXJFdmVudD4gPSBuZXcgU3ViamVjdCgpO1xuXG4gIGdldFBhcnNlZFZhbHVlcyhldmVudERhdGE6IGFueSkge1xuICAgIGNvbnN0IGlkID0gdGhpcy5ldmVudC5pZDtcbiAgICBjb25zdCBuYW1lID0gZXZlbnREYXRhLm5hbWU7XG4gICAgY29uc3Qgc3RhcnREYXRlID0gcGFyc2UoZXZlbnREYXRhLnN0YXJ0RGF0ZS5yZXBsYWNlKCcsICcsICdUJykpO1xuICAgIGNvbnN0IGVuZERhdGUgPSBwYXJzZShldmVudERhdGEuZW5kRGF0ZS5yZXBsYWNlKCcsICcsICdUJykpO1xuICAgIGNvbnN0IGNvbG9yID0gZXZlbnREYXRhLmNvbG9yO1xuXG4gICAgcmV0dXJuIHsgaWQsIG5hbWUsIHN0YXJ0RGF0ZSwgZW5kRGF0ZSwgY29sb3IgfTtcbiAgfVxuXG4gIG5nT25Jbml0KCkge1xuICAgIGlmICh0aGlzLmV2ZW50ICYmIHRoaXMubW9kZSA9PT0gJ2VkaXQnKSB7XG4gICAgICB0aGlzLmV2ZW50Rm9ybSA9IG5ldyBGb3JtR3JvdXAoe1xuICAgICAgICBuYW1lOiBuZXcgRm9ybUNvbnRyb2woeyB2YWx1ZTogdGhpcy5ldmVudC5uYW1lLCBkaXNhYmxlZDogIXRoaXMuZWRpdGFibGUgfSksXG4gICAgICAgIHN0YXJ0RGF0ZTogbmV3IEZvcm1Db250cm9sKHsgdmFsdWU6IHRoaXMuZXZlbnQuc3RhcnREYXRlLCBkaXNhYmxlZDogIXRoaXMuZWRpdGFibGUgfSksXG4gICAgICAgIGVuZERhdGU6IG5ldyBGb3JtQ29udHJvbCh7IHZhbHVlOiB0aGlzLmV2ZW50LmVuZERhdGUsIGRpc2FibGVkOiAhdGhpcy5lZGl0YWJsZSB9KSxcbiAgICAgICAgY29sb3I6IG5ldyBGb3JtQ29udHJvbCh7IHZhbHVlOiB0aGlzLmV2ZW50LmNvbG9yLCBkaXNhYmxlZDogIXRoaXMuZWRpdGFibGUgfSlcbiAgICAgIH0pO1xuICAgIH0gZWxzZSB7XG4gICAgICB0aGlzLmV2ZW50Rm9ybSA9IG5ldyBGb3JtR3JvdXAoe1xuICAgICAgICBuYW1lOiBuZXcgRm9ybUNvbnRyb2woJ05ldyBldmVudCcpLFxuICAgICAgICBzdGFydERhdGU6IG5ldyBGb3JtQ29udHJvbCh0aGlzLmV2ZW50LnN0YXJ0RGF0ZSksXG4gICAgICAgIGVuZERhdGU6IG5ldyBGb3JtQ29udHJvbCh0aGlzLmV2ZW50LmVuZERhdGUpLFxuICAgICAgICBjb2xvcjogbmV3IEZvcm1Db250cm9sKHRoaXMuZXZlbnQuY29sb3IpXG4gICAgICB9KTtcbiAgICB9XG4gIH1cblxuICBvblNhdmUoKSB7XG4gICAgY29uc3QgZXZlbnQgPSB0aGlzLmdldFBhcnNlZFZhbHVlcyh0aGlzLmV2ZW50Rm9ybS52YWx1ZSk7XG4gICAgdGhpcy5ldmVudERhdGEubmV4dChldmVudCk7XG4gICAgdGhpcy5tb2RhbFJlZi5oaWRlKCk7XG4gIH1cblxuICBvbkRlbGV0ZSgpIHtcbiAgICBjb25zdCBldmVudCA9IHRoaXMuZ2V0UGFyc2VkVmFsdWVzKHRoaXMuZXZlbnRGb3JtLnZhbHVlKTtcbiAgICB0aGlzLmV2ZW50RGVsZXRlZC5uZXh0KGV2ZW50KTtcbiAgICB0aGlzLm1vZGFsUmVmLmhpZGUoKTtcbiAgfVxuXG59XG4iXX0=

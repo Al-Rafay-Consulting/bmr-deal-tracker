@@ -1,0 +1,289 @@
+<div class="row">
+  <!--Grid column-->
+  <div class="col-lg-12 col-md-12">
+    <!--Card-->
+    <mdb-card cascade="true" narrower="true">
+      <!--Card image-->
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center"
+      >
+        <h4 class="h4-responsive">Deal Tracking Report</h4>
+
+        <div>
+          <!-- <div *ngIf="common.checkRole('AC')" style="margin-right:10px ;" class="btn-group" role="group" aria-label="Basic example">
+                      <a (click)="FNframe.show()" mdbBtn gradient="aqua" size="sm" data-toggle="modal"
+                          data-target="#basicExample" mdbWavesEffect>
+                          <mdb-icon fas icon="file-signature" class="mr-1"></mdb-icon> Footnotes
+                      </a>
+                  
+                 </div>  -->
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <a
+              (click)="frame.show()"
+              mdbBtn
+              gradient="aqua"
+              size="sm"
+              data-toggle="modal"
+              data-target="#basicExample"
+              mdbWavesEffect
+            >
+              <mdb-icon fas icon="filter" class="mr-1"></mdb-icon> Filter
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--/Card image-->
+
+      <!--Card content-->
+      <mdb-card-body style="height: 1400px" cascade="true">
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <div id="reportViewer">
+              <stimulsoft-viewer-angular #viewer                     
+                         [height]="'2200px'">
+                        </stimulsoft-viewer-angular> 
+            </div>
+          </div>
+        </div>
+      </mdb-card-body>
+      <!--/.Card content-->
+    </mdb-card>
+    <!--/.Card-->
+  </div>
+  <!--Grid column-->
+</div>
+
+<div
+  style="overflow-y: auto"
+  mdbModal
+  #frame="mdbModal"
+  class="modal fade right"
+  id="frameModalTop"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: true }"
+>
+  <div
+    class="modal-dialog modal-full-height modal-right modal-notify modal-info"
+    role="document"
+  >
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading lead">Filter</p>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="frame.hide()"
+        >
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-left">
+          <mat-form-field>
+            <input
+              matInput
+              [matDatepicker]="StartDatePicker"
+              placeholder="Select Start Date"
+              #StartDate="ngModel"
+              [(ngModel)]="StartEventDate"
+              name="StartDate"
+            />
+
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="StartDatePicker"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #StartDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              [matDatepicker]="EndDatePicker"
+              placeholder="Select End Date"
+              #EndDate="ngModel"
+              [(ngModel)]="EndEventDate"
+              name="EndDate"
+            />
+
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="EndDatePicker"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #EndDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <div class="md-form" style="margin-top: 1rem !important">
+            <mat-form-field class="example-full-width">
+              <mat-label>Market</mat-label>
+              <mat-select
+                [multiple]="true"
+                (ngModelChange)="AutoCompMarket.searchResult.next($event)"
+                label="Market"
+                type="text"
+                name="MarketID"
+                #MarketID="ngModel"
+                [(ngModel)]="MarketName"
+              >
+                <mat-option>-- Clear --</mat-option>
+                <mat-option
+                  *ngFor="let option of AutoCompMarket.results | async"
+                  [value]="option.ID"
+                >
+                  {{ option.Title }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+
+
+          <div class="md-form" style="margin-top: 1rem !important">
+            <mat-form-field class="example-full-width">
+              <mat-label>Status</mat-label>
+              <mat-select
+              [multiple]="true"
+              (ngModelChange)="AutoCompStatus.searchResult.next($event)"
+              label="Status"
+              type="text"
+              name="StatusID"
+              #StatusID="ngModel"
+              [(ngModel)]="StatusName"
+            >
+              <mat-option>-- Clear --</mat-option>
+              <mat-option
+                *ngFor="let option of AutoCompStatus.results | async"
+                [value]="option.ID"
+              >
+                {{ option.Title }}
+              </mat-option>
+            </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="row" style="margin-top: 1rem !important">
+            <div class="col-md-6">
+              <button
+                class="w-100 modalFiltersButton"
+                mdbBtn
+                color="info"
+                size="md"
+                type="button"
+                (click)="onFilterClick(frame)"
+                mdbWavesEffect
+              >
+                <mdb-icon fas icon="filter" class="mr-1"></mdb-icon> Apply
+                Filter
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button
+                class="w-100 modalFiltersButton"
+                mdbBtn
+                color="info"
+                size="md"
+                type="button"
+                (click)="onFilterClear(frame)"
+                mdbWavesEffect
+                outline="true"
+              >
+                <mdb-icon fas icon="minus" class="mr-1"></mdb-icon> Clear Filter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  style="overflow-y: auto"
+  mdbModal
+  #FNframe="mdbModal"
+  class="modal fade right"
+  id="frameModalTop"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: true }"
+>
+  <div
+    class="modal-dialog modal-full-height modal-notify modal-info"
+    role="document"
+  >
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading lead">Footnotes</p>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="FNframe.hide()"
+        >
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-left">
+          <mat-form-field class="example-full-width">
+            <mat-label>Footnotes:</mat-label>
+
+            <textarea
+              matInput
+              class="MatInputBoxShadow"
+              #FNotess="ngModel"
+              [(ngModel)]="FNotes"
+              name="FNotess"
+            ></textarea>
+          </mat-form-field>
+
+          <div class="row" style="margin-top: 1rem !important">
+            <div class="col-md-6">
+              <button
+                class="w-100 modalFiltersButton"
+                mdbBtn
+                color="info"
+                size="md"
+                type="button"
+                (click)="onFilterClick(FNframe)"
+                mdbWavesEffect
+              >
+                <mdb-icon fas icon="plus" class="mr-1"></mdb-icon> Footnotes
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button
+                class="w-100 modalFiltersButton"
+                mdbBtn
+                color="info"
+                size="md"
+                type="button"
+                (click)="onFilterClear(FNframe)"
+                mdbWavesEffect
+                outline="true"
+              >
+                <mdb-icon fas icon="minus" class="mr-1"></mdb-icon> Clear Text
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

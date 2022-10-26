@@ -1,0 +1,33 @@
+.highlight{
+    font-weight: bold;
+    color: #5e5a5e;
+    font-size: 17px;
+    text-decoration: none !important;
+}
+
+.chipArea{  
+    float: left;
+    margin: 0 8px 0 -12px;
+    height: 32px; 
+    width: 32px; 
+    border-radius: 50%;
+  }
+  
+  .selectedChip{
+    color: white !important; 
+    background-color: #49d054 !important;
+  }
+
+  .mat-cell, .mat-footer-cell {
+    font-size: 14px !important;
+}
+
+.selectedView{
+  color: white !important; 
+  background-color: #0a70b4 !important;
+}
+.gm-style div[aria-hidden="true"]{
+  background-color: green !important;
+  padding: 5px;
+  border-radius: 5px;
+}

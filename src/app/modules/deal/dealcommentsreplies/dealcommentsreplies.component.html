@@ -1,0 +1,96 @@
+<div class="mat-elevation-z8 p-4 padding-replies">
+
+
+
+    <div class="row" >
+        <div class="reply-header">
+            <span style="color: #6c859c;font-weight: 700; font-size: 14px;">
+                <!-- <mat-icon class="mr-1" style="font-size: 24px;">subject</mat-icon> -->
+
+                <div class="col-md-12 pl-2 pt-2 createdBy-area">
+                    <mat-icon class="mr-1 audit-icon" >person</mat-icon>
+                    <p>{{data?.Editor?.Title}} </p>
+                    <mat-icon class="mr-1 ml-4 audit-icon" >event</mat-icon>
+                    <p> {{data?.Created | date:'MM/dd/yyyy hh:mm aa'}} </p>
+
+
+                </div>
+
+
+            </span>
+            <div class="mr-4">
+                <form class="col-md-12 example-form elem" style="width: 200%;">
+                    <form class="form-inline md-form active-pink-2 mt-0 mb-0" style="width: 200%;">
+                        <mdb-icon style="color: #40a9e6;" fas icon="search" aria-hidden="true" class="mr-2"></mdb-icon>
+                        <input class="form-control form-control-sm  w-75 TopMenuSearchField" (keyup)="applyFilterSearch($event.target.value)" [(ngModel)]="searchKey" name="searchKey"
+                          type="text" placeholder="Search Comments" aria-label="Search"  mdbInput>
+                      </form>
+                    </form>
+            </div>
+            <div class="mr-4">
+                <button *ngIf="common.checkRole('AC')" class="matIconButtonsCustom-this mr-1 fontfamily" mat-button matTooltip="Reply All" (click)="openBottomReplySheet(data,true,'Add')">
+                    <mat-icon >reply</mat-icon> Reply All
+                </button>
+                <button *ngIf="common.checkRole('AC')" class="matIconButtonsCustom-this mr-1 fontfamily" mat-button matTooltip="Reply" (click)="openBottomReplySheet(data,false,'Add')">
+                    <mat-icon>reply</mat-icon> Reply
+                </button>
+                <button class="matIconButtonsCustom-this fontfamily" mat-button matTooltip="Back" (click)="onBackClick()">
+                    <mat-icon >chevron_left</mat-icon> Back
+                </button>
+            </div>
+
+        </div>
+        <div class="reply-header">
+            <span style="color: #6c859c;font-weight: 700; font-size: 14px; margin-bottom: 15px">
+
+                <span class="question">{{data?.Question.Title}}</span>
+            </span>
+        </div>
+        <div style="height:1000px; overflow: auto;"  class="w-100">
+            <div *ngFor="let r of replies; let index = index" class="w-100" >
+
+                <div class="reply-detail">
+                    <div class="col-md-12">
+                        <div class="audit">
+                            <p class="d-flex DatePosition">
+                                
+                         <button mat-button type="button" class="flat-Icon-Color"  matTooltip="Edit"
+                                *ngIf="common.checkRole('A')"
+                         (click)="onEdit(r)">
+                        <mat-icon>edit</mat-icon>
+                        </button>
+
+                                <button mat-button type="button" class="flat-Icon-Color"  matTooltip="Delete"
+                        *ngIf="common.checkRole('A')"
+                         (click)="DeleteNote(r, index)">
+                        <mat-icon>delete</mat-icon>
+                        </button>
+                        </p>
+                        <p class="d-flex DatePosition" style="    margin-top: 13px;margin-right: 6px;">
+                            <mat-icon class="shadow-Icon-Color mr-3" style="margin-right: 0.5rem !important;">schedule</mat-icon>  Posted: {{r.Created | date: 'MM/dd/yyyy hh:mm aa'}}</p>
+                            <p class="d-flex">
+                                <img [src]="imageURL" class="rounded-circle" style="    width: 3%;height: 1%;">
+                                <span style="margin-top: 0.1%;"><span style="color:#6c859c;font-weight: 600;">{{r.Editor?.Title}} </span><br>
+
+                                    <span style="font-size: 12px;">To: </span>
+                                    <span style="font-size: 12px;" *ngFor="let rec of r.Receipents?.results; let index = index">  {{rec?.Title}}{{ index  == r.Receipents?.results.length - 1 ? '':', '}} </span>
+                                </span>
+
+
+
+                            
+
+                        </div>
+
+                        <p style="color:#4d4c4f;font-size: 14px;" [innerHTML]="r.Reply"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+

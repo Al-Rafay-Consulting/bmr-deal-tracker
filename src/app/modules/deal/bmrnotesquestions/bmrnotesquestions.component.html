@@ -1,0 +1,81 @@
+<div
+    class="modal-header light-blue darken-3 white-text  gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+    <h4 class="h4-responsive">
+        Question
+    </h4>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a (click)="modalRef.hide()">
+            <button mdbBtn type="button" color="info" size="sm" class="waves-light" mdbWavesEffect>
+                <mdb-icon fas icon="times"></mdb-icon>
+            </button>
+        </a>
+    </div>
+</div> 
+
+<div class="modal-body mb-0 text-left" id="modalBodyArea">
+    <div class="row">
+        <div class="col-sm-12">
+            <form #Question="ngForm" autocomplete="off" (ngSubmit)="onSubmit(Question)"> 
+                <div class="row">
+                <div class="col-md-10">
+      
+
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Recipient</mat-label>
+                        <mat-select [multiple]="true" required [(ngModel)]="selectedReceipentsID" #RecipientId [ngModelOptions]="{standalone: true}" >
+                          <mat-option *ngFor="let option of AutoCompReceipent.results | async" [value]="option.Id">
+                            {{ option.Title }}
+                          </mat-option>
+                        </mat-select>                        
+                    </mat-form-field>
+                    <mat-error *ngIf="showRecipientError">
+                        {{recipientErrorMessage}}
+                    </mat-error>
+
+                </div>
+
+                <div class="col-sm-10">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Subject </mat-label>
+                        <input matInput class="MatInputBoxShadow" required name="Title" #Title="ngModel"
+                        [(ngModel)]="formData.Title" type="text">                            
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                        <div class="text-center">
+                                <mat-error *ngIf="showRecipientError">
+                                    {{recipientErrorMessage}}
+                                </mat-error>
+                                <button type="button" (click)="onSubmit(Question)" [disabled]="Question.invalid"
+                                    [hidden]="isView" mdbBtn color="default" class="waves-light" mdbWavesEffect>
+                                    <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{getSubmitText()}}
+                                </button>
+                        </div>
+                </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-4" [hidden]="true">
+                        <div class="md-form">
+                            <input name="ID" #ID="ngModel" [(ngModel)]="formData.ID" type="text" class="form-control"
+                                mdbInput>
+                            <label>ID</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="md-form">
+                            <angular-editor required  name="Reply" [placeholder]="'Enter text here...'"
+                                [(ngModel)]="bmrNotesReplies.Reply" [config]="config" #RepliesReply="ngModel"></angular-editor>
+                        </div>
+                    </div>
+                </div>
+              
+
+            </form>
+        </div>
+    </div>
+
+</div> 

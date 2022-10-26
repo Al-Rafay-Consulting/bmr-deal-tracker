@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>BMR | Deal Tracker</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="icon" type="image/x-icon" href="assets/emap.ico"> -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
+  <!-- References for Term Store -->
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/1033/initstrings.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/init.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/MicrosoftAjax.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/sp.core.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/sp.runtime.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/sp.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/sp.taxonomy.js"></script>
+  <script type="text/javascript" src="http://localhost:8100/_layouts/15/SP.RequestExecutor.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvPLtJtc9s89H4afNkK3E_dTFEVMyK2PY&libraries=places&sensor=false&language=en">
+  </script>
+
+</head>
+
+<body class="light-blue-skin">
+  <p id="authError" style="width:100%; text-align: center; padding-top:8%;"></p>
+  <app-root>
+    <!-- <img  src="https://alrafayconsulting.sharepoint.com/sp/SourceCode/images/FullEMAPLogo.png" alt="">  -->
+    <div id="Apploader" style="color: #40a9e6" class="la-square-jelly-box la-3x">
+      <div></div>
+      <div></div>
+    </div>
+  </app-root>
+</body>
+</html>
+
+
+<script>
+  var url = "https://alrafayconsulting.sharepoint.com/sites/DMSDemo2/deal-tracker";
+  //var url = "http://localhost:8100";
+  // Request Digest was null on page viewer webpart that is why get the digest.
+  function copyImages() {
+    let images = JSON.parse($('#dealImages').text());
+    let folder1 = $('#orgFolder').text();
+    let folder2 = $('#copyFolder').text();
+    console.log(images);
+    console.log(folder1);
+    console.log(folder2);
+    for (let k=0; k<images.length; k++){
+      let image = images[k];
+      image.description
+      getRequestDigest(folder1, folder2, image.description);
+    }
+  }
+
+  function getRequestDigest(folder1, folder2, description){
+    var digest = $('#__REQUESTDIGEST').val();
+    $.ajax({
+      url: url + "/_api/contextinfo",
+      method: "POST",
+      headers: { "Accept": "application/json; odata=verbose",
+      "X-RequestDigest": digest
+     },
+      success: function (data) {
+        //$('#__REQUESTDIGEST').val(data.d.GetContextWebInformation.FormDigestValue);
+        var rdg = data.d.GetContextWebInformation.FormDigestValue;
+        // console.log(rdg);
+        CopyFile(folder1, folder2, description, rdg);
+      },
+      error: function (data, errorCode, errorMessage) {
+        console.log(errorMessage);
+      }
+    });
+  }
+  function CopyFile(folder1, folder2, description, dg) {
+    var oUrl = url + "/_api/web/GetFileByServerRelativeUrl('/sites/DMSDemo2/deal-tracker/DealImages/"+folder1+"/"+description+"')/CopyTo(strnewurl='/sites/DMSDemo2/deal-tracker/DealImages/"+folder2+"/"+description+"',boverwrite=true)";
+    $.ajax({
+      url: oUrl,
+      type: "POST",
+      "headers": {
+        "X-RequestDigest": dg,
+        "accept": "application/json",
+      },
+      success: function (data) {
+        console.log("Image Copied ... !");
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+  }
+</script>
