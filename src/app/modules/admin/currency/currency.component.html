@@ -1,0 +1,129 @@
+<div class="row fixed-top my-1 pl-3 pr-3 stickyMenuTop" >
+    <div class="btn-group" role="group" aria-label="Basic example">
+      
+      <a (click)="onSubmit(Currency)" class="stickyButtons" [hidden]="Currency.invalid || IsInvalidForm || isView">
+          <button mdbBtn type="button" class="btn-sm" [disabled]="Currency.invalid" [hidden]="isView">
+              <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+          </button>
+      </a>
+  
+      <a routerLink="/admin/Currency/list" style="color: #000000;" class="stickyButtons">
+        <button mdbBtn type="button" class="btn-sm">
+          <mdb-icon fas icon="list" class="mr-1"></mdb-icon>List
+        </button>
+      </a>
+    
+      <a (click)="onReload(Currency)" class="stickyButtons">
+        <button mdbBtn *ngIf="isEdit || isCreated" type="button" class="btn-sm">
+          <mdb-icon fas icon="redo-alt" class="mr-1"></mdb-icon>Reload
+        </button>
+      </a>
+  
+      <a *ngIf="common.CheckIfUserhasAccess_Action('Currency','Add')"  (click)="onCreate(Currency)" class="stickyButtons">
+        <button mdbBtn type="button"  *ngIf="!isCreated" class="btn-sm">
+          <mdb-icon fas icon="plus" class="mr-1"></mdb-icon>New
+        </button>
+      </a>
+    
+      <a *ngIf="common.CheckIfUserhasAccess_Action('Currency','Edit')" (click)="onEdit()" class="stickyButtons">
+        <button mdbBtn *ngIf="isView" type="button" class="btn-sm">
+          <mdb-icon fas icon="edit" class="mr-1"></mdb-icon>Edit
+        </button>
+      </a>
+      <a *ngIf="common.CheckIfUserhasAccess_Action('Currency','Delete')" (click)="onDelete(primaryKey)" class="stickyButtons">
+        <button mdbBtn *ngIf="isEdit" type="button" class="btn-sm">
+          <mdb-icon fas icon="trash-alt" class="mr-1"></mdb-icon>Delete
+        </button>
+      </a>
+    </div>
+  
+  </div>
+  <div class="row py-4">
+  
+    <div class="col-lg-12 col-md-12">    
+      <mdb-card cascade="true" narrower="true">      
+      
+        <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">  
+          <h4 class="h4-responsive">{{formTitle}}</h4>
+    
+        </div>
+
+        <div class="row card-text">    
+            <div class="col-sm-12">
+                <div class="row AuditFields">
+                    <div class="col-md-12">
+                       {{AuditDetails}}
+                    </div>                     
+              </div>
+            </div>
+        </div>
+
+        <form #Currency="ngForm" autocomplete="off" (ngSubmit)="onSubmit(Currency)"> 
+        <mdb-card-body cascade="true">
+  
+        
+            <fieldset [disabled]="isView">
+              <div class="row">
+                <div class="col-sm-4" [hidden]="true">
+                  <div class="md-form">
+
+                    <input 
+                    name="ID" 
+                    #ID="ngModel" 
+                    [(ngModel)]="formData.ID" 
+                    type="text"                     
+                    class="form-control" mdbInput>
+                    <label>Currency ID</label>
+
+                  </div>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+
+                  <mat-form-field class="example-full-width">
+
+                    <mat-label>Currency Name</mat-label>
+                    
+                    <input matInput class="MatInputBoxShadow"
+                    required 
+                    name="Title" 
+                    #Title="ngModel" 
+                    [(ngModel)]="formData.Title"
+                    type="text" > 
+
+                    <mat-error *ngIf="Title.invalid && Title.dirty">This field is required</mat-error> 
+
+                  </mat-form-field>  
+
+                </div>
+              </div>
+             
+              <div class="row">
+                <div class="col-sm-4">
+  
+                </div>
+                <div class="col-md-4">
+                  <div class="md-form">
+                    <mdb-checkbox name="Inactive" #Inactive="ngModel" [(ngModel)]="formData.Inactive">
+                      Inactive
+                    </mdb-checkbox>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+  
+                </div>
+              </div>
+            <div class="text-center">
+              <button type="button" (click)="onSubmit(Currency)" [disabled]="Currency.invalid" [hidden]="isView" mdbBtn color="default" class="waves-light" mdbWavesEffect>
+                <mdb-icon fas icon="save" class="mr-1"></mdb-icon>{{SavebuttonText}}
+              </button>
+            </div>
+          </fieldset>
+                     
+        </mdb-card-body>      
+      </form>
+    </mdb-card>   
+    </div>  
+  </div>
+  

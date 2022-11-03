@@ -505,6 +505,7 @@
             <div class="row" style="padding: 0px 1%">
               <!-- Funds col 1 -->
               <div class="col-sm-4">
+
                 <!-- Fund -->
                 <mat-form-field class="example-full-width">
                   <mat-label>Funds:</mat-label>
@@ -588,6 +589,26 @@
                   />
                   <span matPrefix style="color: #757575">$&nbsp;</span>
                 </mat-form-field>
+                                <!-- Currency -->
+                                <mat-form-field class="example-full-width">
+                                  <mat-label>Currency</mat-label>
+                                  <mat-select
+                                    label="Currency"
+                                    type="text"
+                                    name="selectedCurrency"
+                                    [(ngModel)]="selectedCurrency"
+                                    required
+                                    (selectionChange)="selCurrency($event)"
+                                  >
+                                    <mat-option disabled>-- Please Select --</mat-option>
+                                    <mat-option
+                                      *ngFor="let item of currency_all"
+                                      [value]="item"
+                                      >{{ item.Title }}</mat-option
+                                    >
+                                  </mat-select>
+                                  <mat-error>This field is required</mat-error>
+                                </mat-form-field>
               </div>
               <!-- Analysis Date col 2  -->
               <div class="col-sm-4">

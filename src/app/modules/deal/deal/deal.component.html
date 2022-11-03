@@ -250,6 +250,22 @@
             <div class="row" style="padding: 0px 1%">
               <div class="col-sm-4">
                 <mat-form-field class="example-full-width">
+                  <mat-label>Currency</mat-label>
+                  <mat-select required id="CurrencyID" class="MatInputBoxShadow" type="text" name="CurrencyId"
+                    #CurrencyId="ngModel" [(ngModel)]="objInvestmentSummary.CurrencyId"
+                    (ngModelChange)="AutoCompCurrency.searchResult.next($event)">
+                    <mat-option>-- Clear --</mat-option>
+                    <mat-option *ngFor="let option of AutoCompCurrency.results | async" [value]="option.ID">
+                      {{ option.Title }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>This field is required</mat-error>
+                </mat-form-field>
+                </div>
+              </div>
+            <div class="row" style="padding: 0px 1%">
+              <div class="col-sm-4">
+                <mat-form-field class="example-full-width">
                   <mat-label>Funds</mat-label>
                   <mat-select [multiple]="true" required id="FundsId" class="MatInputBoxShadow" type="text"
                     name="FundsId" #FundsId="ngModel" [(ngModel)]="selectedFunds"

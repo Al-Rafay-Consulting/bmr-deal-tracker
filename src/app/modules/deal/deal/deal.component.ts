@@ -24,6 +24,7 @@ import { Brokerage } from 'src/app/modules/admin/brokerage/brokerage.model';
 import { Categorization } from 'src/app/modules/admin/categorization/categorization';
 import { SubMarket } from 'src/app/modules/admin/submarket/submarket.model';
 import { Status } from 'src/app/modules/admin/status/status.model';
+import { Currency } from 'src/app/modules/admin/currency/currency.model';
 import { ResponsibleParty } from 'src/app/modules/admin/resposibleparty/responsibleparty.model'
 import { Vendor } from '../vendor/vendor.model';
 import { InvestmentSummary } from '../investmentsummary.model';
@@ -62,6 +63,7 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
   AutoCompCategorization: Autocomplete<Categorization> = new Autocomplete<Categorization>("Title", "ID");
   AutoCompSubMarket: Autocomplete<SubMarket> = new Autocomplete<SubMarket>("Title", "ID");
   AutoCompStatus: Autocomplete<Status> = new Autocomplete<Status>("Title", "ID");
+  AutoCompCurrency: Autocomplete<Currency> = new Autocomplete<Currency>("Title", "ID");
   AutoCompState: Autocomplete<State> = new Autocomplete<State>("Title", "ID");
   AutoCompFunds: Autocomplete<Dealgroup> = new Autocomplete<Dealgroup>("Title", "ID");
   AutoCompResponsibleParty: Autocomplete<ResponsibleParty> = new Autocomplete<ResponsibleParty>("Title", "ID");
@@ -142,6 +144,7 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
       this.getBrokerage();
       this.getBroker();
       this.getStatus();
+      this.getCurrency();
       this.getFunds();
       this.getResponsibleParty();
       this.getState();
@@ -298,34 +301,6 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
 
 
   }
-
-  // AfterInsert(jsonObject: any) {
-  //   this.ShowSpinner();
-  //   Promise.all(
-  //     [
-  //       this.SaveInvestmentSummary()
-
-  //     ]).then(res => {
-  //       //this.SaveCreateDeleteInfo(),
-  //       this.createImageFolder(),
-  //         this.SaveKeyUpcoming(),
-  //         this.SaveSeller(),
-  //         this.SaveQuickLinks(),
-  //       //this.SaveBMRNotes(),
-  //       //this.SaveDealComments(),
-  //       this.common.HideSpinner();
-  //       setTimeout(() => {
-  //         this.router.navigate(['/portal/deals/list'], {
-  //           queryParams: {
-  //             status: 'All'
-  //           }
-  //         });
-  //       }, 1000);
-
-
-  //     })
-  // }
-
   createImageFolder() {
     this.service.createFolder('DealImages', 'Deal_' + this.primaryKey).then(res => {
       // console.log("folder created ... !");
@@ -337,6 +312,7 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
     let objIS = new InvestmentSummary();
     objIS.DealId = this.primaryKey;
     objIS.ID = this.objInvestmentSummary.ID;
+    objIS.CurrencyId = this.objInvestmentSummary.CurrencyId;
     objIS.AnalysisStartDate = this.objInvestmentSummary.AnalysisStartDate;
     objIS.EstCompletionDate = this.objInvestmentSummary.EstCompletionDate;
     objIS.InPlaceRSF = this.objInvestmentSummary.InPlaceRSF;
@@ -369,13 +345,10 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
       objBN.ID = this.objBMRNotesQuestions.ID;
       objBN.Title = this.objBMRNotesQuestions.Title;
       // create array of IDs for Brokers e.g - [1,2]
-
       var objBMRNotes = {
         results: this.selectedBMRDealTeam
       }
       objBN.ReceipentsId = objBMRNotes;
-
-
       await this.service.createSPItem("BMR Notes Discussion Questions", "BMR Notes Discussion Questions", objBN).subscribe(res => {
         this.SaveBMRNotesReplies(res);
       })
@@ -402,7 +375,6 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
       await this.service.createSPItem("BMR Notes Discussion Replies", "BMR Notes Discussion Replies", this.bmrNotesReplies).subscribe(res => { })
     }
   }
-
   async SaveDealComments() {
     if (this.objDealCommentsQuestions.Title != null) {
       var objDC = new DealCommentsQuestions();
@@ -420,7 +392,6 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
       })
     }
   }
-
   async SaveDealCommentsrReplies(data) {
     console.log(data);
     if (this.objDealCommentsQuestions.Title != null || this.objDealCommentsQuestions.Title != undefined) {
@@ -689,6 +660,19 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
       this.common.HideSpinner();
       this.AutoCompStatus.data = res['d'].results as Status[];
       this.AutoCompStatus.resultObserve();
+    });
+  }
+  getCurrency() {
+    const query = {
+      select: 'ID, Title, Inactive,Modified, Editor/Title',
+      expand: 'Editor',
+      filter: 'Inactive eq true or Inactive eq null',
+      orderby: 'Title asc'
+    };
+    this.service.readItems("Currency", query).then(res => {
+      this.common.HideSpinner();
+      this.AutoCompCurrency.data = res['d'].results as Currency[];
+      this.AutoCompCurrency.resultObserve();
     });
   }
 

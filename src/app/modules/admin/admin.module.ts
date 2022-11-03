@@ -52,8 +52,12 @@ import { FootnoteslistsComponent } from './footnotes/footnoteslists/footnoteslis
 
 import { ResposiblepartyComponent } from './resposibleparty/resposibleparty.component';
 import { ResposiblepartylistComponent } from './resposibleparty/resposiblepartylist/resposiblepartylist.component';
+
 import { CategorizationComponent } from './categorization/categorization.component';
 import { CategorizationlistComponent } from './categorization/categorizationlist/categorizationlist.component';
+
+import { CurrencyComponent } from './currency/currency.component';
+import { CurrencylistComponent } from './currency/currencylist/currencylist.component';
 
 
 
@@ -75,7 +79,7 @@ import { CategorizationlistComponent } from './categorization/categorizationlist
     FootnotesComponent, 
     FootnoteslistsComponent, 
     ResposiblepartyComponent, 
-    ResposiblepartylistComponent, CategorizationComponent, CategorizationlistComponent
+    ResposiblepartylistComponent, CategorizationComponent, CategorizationlistComponent, CurrencyComponent, CurrencylistComponent
     ],
   imports: [
     CommonModule,

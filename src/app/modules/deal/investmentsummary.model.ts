@@ -3,6 +3,7 @@ export class InvestmentSummary {
     ID:number=0;
     DealId:number = null;
     FundsId:any = null;
+    CurrencyId:number = null;
     AnalysisStartDate:string =null;
     EstCompletionDate:string=null;
     InPlaceRSF:number=null;

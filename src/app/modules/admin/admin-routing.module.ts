@@ -42,6 +42,9 @@ import { ResposiblepartylistComponent } from './resposibleparty/resposiblepartyl
 import { CategorizationComponent } from './categorization/categorization.component';
 import { CategorizationlistComponent } from './categorization/categorizationlist/categorizationlist.component';
 
+import { CurrencyComponent } from './currency/currency.component';
+import { CurrencylistComponent } from './currency/currencylist/currencylist.component';
+
 const routes: Routes = [
 
 
@@ -122,6 +125,12 @@ const routes: Routes = [
   },
   {
     path: "Categorization/list", component: CategorizationlistComponent , runGuardsAndResolvers: 'always' , canActivate : [AuthGuardGuard] , data: {sectionName: "Category"}
+  },
+  {
+    path: "Currency/form", component: CurrencyComponent , runGuardsAndResolvers: 'always' , canActivate : [AuthGuardGuard] , data: {sectionName: "Category"}
+  },
+  {
+    path: "Currency/list", component: CurrencylistComponent , runGuardsAndResolvers: 'always' , canActivate : [AuthGuardGuard] , data: {sectionName: "Category"}
   }
 
 ];

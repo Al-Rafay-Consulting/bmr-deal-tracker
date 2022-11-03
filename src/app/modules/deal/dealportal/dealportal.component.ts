@@ -395,7 +395,9 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
 
 
   public status_all: ExpandedTitle[] = [];
+  public currency_all: ExpandedTitle[] = [];
   public selectedStatus: ExpandedTitle = new ExpandedTitle();
+  public selectedCurrency: ExpandedTitle = new ExpandedTitle();
   async getStatus() {
     this.status_all = [];
     const query = {
@@ -410,7 +412,20 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
       this.selectedStatus = filtered[0];
     });
   }
-
+  async getCurrency() {
+    this.currency_all = [];
+    const query = {
+      select: 'ID, Title',
+      orderby: 'Title'
+    };
+    await this.service.readItems("Currency", query).then(res => {
+      this.currency_all = res['d'].results;
+      let filtered = this.currency_all.filter(a => {
+        return a.Id === this.investmentSummary_Edit.CurrencyId
+      });
+      this.selectedCurrency = filtered[0];
+    });
+  }
   public broker_all: ExpandedTitle[] = [];
   public selectedBroker: ExpandedTitle[] = [];
   public selectedBroker_Copy: ExpandedTitle[] = [];
@@ -532,7 +547,9 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
   selState(event) {
     this.selectedState = event.value;
   }
-
+  selCurrency(event) {
+    this.selectedCurrency = event.value;
+  }
   selFunds(event) {
     this.selectedFunds = event.value;
   }
@@ -634,6 +651,7 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
   showInvestSummaryInfoEdit() {
     this.investmentSummary_Edit = JSON.parse(JSON.stringify(this.investmentSummary));
     this.getFunds();
+    this.getCurrency();
   }
   showDealDetailsInfoEdit() {
     this.sellerItem_Edit = JSON.parse(JSON.stringify(this.sellerItem));
@@ -697,9 +715,9 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
 
     this.investmentSummary = new InvestmentSummary();
     const query = {
-      select: '*, Funds, FundsId, Funds/ID, Funds/Title',
+      select: '*, Funds, FundsId, Funds/ID, Funds/Title,CurrencyId, Currency/ID, Currency/Title',
       filter: 'DealId eq ' + this.primaryKey,
-      expand: 'Funds',
+      expand: 'Funds,Currency',
       orderby: ''
     };
     this.service.readItems("InvestmentSummary", query).then(res => {
@@ -810,6 +828,7 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
       ID: this.investmentSummary_Edit.ID,
       // col 1
       FundsId: { results: this.selectedFunds },
+      CurrencyId: this.selectedCurrency == undefined ? null : this.selectedCurrency.Id,
       InPlaceRSF: Number(this.investmentSummary_Edit.InPlaceRSF),
       StabilizedBasis: Number(this.investmentSummary_Edit.StabilizedBasis),
       UntrendedYoC: Number(this.investmentSummary_Edit.UntrendedYoC),
@@ -1063,7 +1082,8 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
   CopyInvestmentSummary() {
     let item = new InvestmentSummary();
     item.DealId = this.copyPrimaryKey;
-    item.FundsId = { results: this.selectedFunds };     // covert funds from currency to drop down
+    item.FundsId = { results: this.selectedFunds };   // covert funds from currency to drop down
+    item.CurrencyId = this.dealItem.CurrencyId,  
     item.AnalysisStartDate = this.investmentSummary.AnalysisStartDate;
     item.EstCompletionDate = this.investmentSummary.EstCompletionDate;
     item.InPlaceRSF = this.investmentSummary.InPlaceRSF;
