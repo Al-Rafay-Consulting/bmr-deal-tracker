@@ -44,6 +44,7 @@ import { CategorizationlistComponent } from './categorization/categorizationlist
 
 import { CurrencyComponent } from './currency/currency.component';
 import { CurrencylistComponent } from './currency/currencylist/currencylist.component';
+import { FXRateComponent } from './fx-rate/fx-rate.component';
 
 const routes: Routes = [
 
@@ -131,6 +132,9 @@ const routes: Routes = [
   },
   {
     path: "Currency/list", component: CurrencylistComponent , runGuardsAndResolvers: 'always' , canActivate : [AuthGuardGuard] , data: {sectionName: "Category"}
+  },
+  {
+    path: "FXRate/list", component: FXRateComponent , runGuardsAndResolvers: 'always' , canActivate : [AuthGuardGuard] , data: {sectionName: "Category"}
   }
 
 ];

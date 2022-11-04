@@ -59,6 +59,7 @@ import { CategorizationlistComponent } from './categorization/categorizationlist
 import { CurrencyComponent } from './currency/currency.component';
 import { CurrencylistComponent } from './currency/currencylist/currencylist.component';
 
+import { FXRateComponent } from './fx-rate/fx-rate.component';
 
 
 
@@ -79,7 +80,8 @@ import { CurrencylistComponent } from './currency/currencylist/currencylist.comp
     FootnotesComponent, 
     FootnoteslistsComponent, 
     ResposiblepartyComponent, 
-    ResposiblepartylistComponent, CategorizationComponent, CategorizationlistComponent, CurrencyComponent, CurrencylistComponent
+    ResposiblepartylistComponent, CategorizationComponent, CategorizationlistComponent, CurrencyComponent, CurrencylistComponent,
+    FXRateComponent,
     ],
   imports: [
     CommonModule,
@@ -103,7 +105,7 @@ import { CurrencylistComponent } from './currency/currencylist/currencylist.comp
     DataTablesModule,
     NgxMaskModule.forRoot(),
     NgxMatColorPickerModule,
-    ApplicationPipesModule
+    ApplicationPipesModule,
   ],
   providers: [
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
