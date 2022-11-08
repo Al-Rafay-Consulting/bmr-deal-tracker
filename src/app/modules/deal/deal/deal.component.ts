@@ -41,8 +41,8 @@ import { MatSelect } from '@angular/material/select';
 import { LoginUser } from 'src/app/Base/User/login-user';
 import { GooglePlaceDirective } from 'src/app/google-place.directive';
 import { Address } from 'cluster';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 declare var google: any;
-
 
 @Component({
   selector: 'app-deal',
@@ -91,6 +91,10 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
     DocLink: '',
   }];
   EventArray: any[] = [];
+  // If Country Name UK
+  Country_Name: any = null;
+  U_S_D: any = null;
+
   @ViewChild('BMRDealTeam') BMRDealTeam: MatSelect;
   @ViewChild('Brokerage') Brokerage: MatSelect;
   @ViewChild('Brokers') Brokers: MatSelect;
@@ -114,7 +118,8 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
     public modalService: MDBModalService,
     public messageDialoge: MessageDialogeService,
     public common: CommonService,
-    public spConfigService: SharePointConfigService
+    public spConfigService: SharePointConfigService,
+    public http: HttpClient
   ) {
     super(service, router, route, spinner, toast, dialog, messageDialoge);
     this.formTitle = "Deal Master";
@@ -327,6 +332,8 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
     objIS.TenantImprovementsPSF = this.objInvestmentSummary.TenantImprovementsPSF;
     objIS.ConversionCostPSF = this.objInvestmentSummary.ConversionCostPSF;
     objIS.UntrendedYoC = this.objInvestmentSummary.UntrendedYoC;
+    // If Country Name UK
+    objIS.Currency_Value = this.U_S_D;
     // create array of IDs for Funds e.g - [1,2]
     var objFunds = {
       results: this.selectedFunds
@@ -781,10 +788,10 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
   }
 
   @ViewChild("placesRef") placesRef: HTMLInputElement;
-
+  
   public handleAddressChange(address: any) {
-    console.log(address.address_components);
-    for (var index = 0; index < address.address_components.length; index++) {
+    console.log('address.address_components',address.address_components);
+    for (var index = 0; index < address.address_components.length; index++) { 
       // address is being binded automatically with the field, no need to add address again.
       // if(address.address_components[index].types[0] == 'street_number' || address.address_components[index].types[0] == 'route'|| address.address_components[index].types[0] == 'locality')
       // this.formData.Address += address.address_components[index].short_name;
@@ -800,13 +807,18 @@ export class DealComponent extends SpBLBase<DealMaster> implements OnInit {
         });
         this.formData.StateId = state[0].ID
       }
-
-
       // zip code
       else if (address.address_components[index].types[0] == 'postal_code') {
         this.formData.ZipCode = address.address_components[index].short_name;
       }
     }
+    // Country Name is UK
+    this.Country_Name = address.formatted_address.split(', ')[2];
+    if(this.Country_Name == 'UK'){
+      this.http.get("https://v6.exchangerate-api.com/v6/2dbcde4e7ee57f80c045748d/latest/USD").toPromise().then((res: any) => {
+        this.U_S_D = res.conversion_rates.USD;
+      });
+    } 
     // latitude and longitutude
     this.formData.Address = address.formatted_address;
     this.formData.Longitude = address.geometry.location.lng();

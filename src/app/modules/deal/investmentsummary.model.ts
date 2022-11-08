@@ -18,6 +18,7 @@ export class InvestmentSummary {
     TenantImprovementsPSF:number=null;
     ConversionCostPSF:number=null;
     UntrendedYoC:number=null;
+    Currency_Value:any=null;
     Funds: Funds = new Funds();
 }
 
