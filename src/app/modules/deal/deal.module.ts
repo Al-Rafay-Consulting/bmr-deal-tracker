@@ -45,6 +45,7 @@ import { PercentageDirective } from 'src/app/base/percentage.directive';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import { GooglePlaceDirective } from 'src/app/google-place.directive';
 
+
 @NgModule({
   declarations: [
       DealComponent,

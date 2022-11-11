@@ -1,0 +1,5 @@
+{
+    "prettier.enableDebugLogs": true,
+    "debug.javascript.autoAttachFilter": "disabled",
+    "json.format.enable": true
+}

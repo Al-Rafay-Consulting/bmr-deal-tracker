@@ -35,6 +35,7 @@ import { GenericService } from 'src/app/services/generic.service';
 import { DealMaster } from '../dealmaster.model';
 import { NgForm } from '@angular/forms';
 import { Contactperson } from '../contactperson.model';
+import { HttpClient } from '@angular/common/http';
 declare var google: any;
 import { Autocomplete } from 'src/app/Base/Autocomplete';
 import { Subject } from 'rxjs';
@@ -61,6 +62,10 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
   contactData: any = null;
   Sellerrepeating: any[] = [];
   itemsList: any[] = [];
+  // If Country UK
+  Country_Name: any = null;
+  U_S_D: any = null;
+
   protected _onDestroy = new Subject<void>();
 
   private keyUpcomingDate_Obj: any = {
@@ -132,6 +137,7 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
     public genService: GeneralService,
     public spConfigService: SharePointConfigService,
     public messageDialog?: MessageDialogeService,
+    public http: HttpClient
   ) {
     super(service, router, route, spinner, toast, dialog, messageDialog);
     this.common.hideGlobalSearch = true;
@@ -824,6 +830,7 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
 
   updateInvestmentSummary(frame: ModalDirective) {
     this.common.ShowSpinner();
+
     let item = {
       ID: this.investmentSummary_Edit.ID,
       // col 1
@@ -844,7 +851,9 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
       PurchasePricePSF: this.investmentSummary_Edit.PurchasePricePSF,
       StabilizedBasisPSF: this.investmentSummary_Edit.StabilizedBasisPSF,
       LabMarketRentPSFMon: this.investmentSummary_Edit.LabMarketRentPSFMon,
-      ConversionCostPSF: this.investmentSummary_Edit.ConversionCostPSF
+      ConversionCostPSF: this.investmentSummary_Edit.ConversionCostPSF,
+      // If Country Name UK
+      Currency_Value: this.U_S_D,
     }
     this.service.updateItem('InvestmentSummary', 'InvestmentSummary', this.investmentSummary_Edit.ID, item).then(res => {
       this.common.HideSpinner();
@@ -1608,6 +1617,13 @@ export class DealportalComponent extends SpBLBase<Deal> implements OnInit {
         this.dealItem_Edit.ZipCode = address.address_components[index].short_name;
       }
     }
+    // Country Name is UK
+    this.Country_Name = address.formatted_address.split(', ')[2];
+    if(this.Country_Name == 'UK'){
+      this.http.get("https://v6.exchangerate-api.com/v6/2dbcde4e7ee57f80c045748d/latest/USD").toPromise().then((res: any) => {
+        this.U_S_D = res.conversion_rates.USD;
+      });
+    } 
     // latitude and longitutude
     this.dealItem_Edit.Address = address.formatted_address;
     this.dealItem_Edit.Longitude = address.geometry.location.lng();
